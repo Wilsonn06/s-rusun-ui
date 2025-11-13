@@ -1,5 +1,5 @@
 // --- Tower API ---
-export async function getTowersByFlat(flat_id) {
+export async function getTowerByFlat(flat_id) {
   const res = await fetch(`http://localhost:3001/tower`);
   const data = await res.json();
   // Filter tower berdasarkan flat_id
@@ -34,10 +34,18 @@ export async function deleteTower(tower_id) {
   if (!res.ok) throw new Error('Gagal hapus tower');
 }
 
+// --- Tower API ---
+export async function getAllTower() {
+  const res = await fetch(`http://localhost:3001/tower`);
+  if (!res.ok) throw new Error('Gagal memuat tower');
+  return res.json();
+}
+
+
 
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:3001/flat'; // sesuaikan port backend kamu
+const API_BASE = 'http://localhost:3001/flat';
 
 export const getFlats = async () => {
   const response = await axios.get(API_BASE);
@@ -63,3 +71,113 @@ export const deleteFlat = async (id) => {
   const response = await axios.delete(`${API_BASE}/${id}`);
   return response.data;
 };
+
+// --- Floor API ---
+export async function getAllFloors() {
+  const res = await fetch(`http://localhost:3001/floor`);
+  return await res.json();
+}
+
+export async function getFloorsByTower(tower_id) {
+  const res = await fetch(`http://localhost:3001/floor`);
+  const data = await res.json();
+  return data.filter(f => f.tower_id === tower_id);
+}
+
+export async function getFloorDetail(floor_id) {
+  const res = await fetch(`http://localhost:3001/floor/${floor_id}`);
+  if (!res.ok) throw new Error('Floor tidak ditemukan');
+  return res.json();
+}
+
+export async function createFloor(data) {
+  const res = await fetch('http://localhost:3001/floor', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Gagal menambah lantai');
+  return await res.json();
+}
+
+
+export async function deleteFloor(floor_id) {
+  const res = await fetch(`http://localhost:3001/floor/${floor_id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Gagal hapus floor');
+}
+
+
+// --- Unit API ---
+export async function getAllUnits() {
+  const res = await fetch(`http://localhost:3001/unit`);
+  return res.json();
+}
+
+export async function getUnitsByFloor(floor_id) {
+  const res = await fetch(`http://localhost:3001/unit`);
+  const data = await res.json();
+  return data.filter(u => u.floor_id === floor_id);
+}
+
+export async function getUnitDetail(unit_id) {
+  const res = await fetch(`http://localhost:3001/unit/${unit_id}`);
+  return res.json();
+}
+
+export async function deleteUnit(unit_id) {
+  const res = await fetch(`http://localhost:3001/unit/${unit_id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Gagal hapus unit');
+}
+
+export async function getUnitsByPemilik(pemilik_id) {
+  const res = await fetch(`http://localhost:3001/unit`);
+  const data = await res.json();
+  return data.filter(u => u.pemilik_id === pemilik_id);
+}
+
+export async function getPemilikByUnit(unit_id) {
+  const res = await fetch(`http://localhost:3001/unit/${unit_id}`);
+  if (!res.ok) throw new Error('Unit tidak ditemukan');
+  const unit = await res.json();
+
+  // Fetch detail pemilik
+  const resPemilik = await fetch(`http://localhost:3001/pemilik/${unit.pemilik_id}`);
+  if (!resPemilik.ok) throw new Error('Pemilik tidak ditemukan');
+  return resPemilik.json();
+}
+
+// --- Pemilik API ---
+export async function getAllPemilik() {
+  const res = await fetch(`http://localhost:3001/pemilik`);
+  if (!res.ok) throw new Error('Gagal memuat data pemilik');
+  return res.json();
+}
+
+export async function getPemilikById(pemilik_id) {
+  const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`);
+  if (!res.ok) throw new Error('Gagal memuat detail pemilik');
+  return res.json();
+}
+
+export async function createPemilik(pemilik) {
+  const res = await fetch(`http://localhost:3001/pemilik`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(pemilik),
+  });
+  if (!res.ok) throw new Error('Gagal menambah pemilik');
+}
+
+export async function updatePemilik(pemilik_id, pemilik) {
+  const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(pemilik),
+  });
+  if (!res.ok) throw new Error('Gagal memperbarui pemilik');
+}
+
+export async function deletePemilik(pemilik_id) {
+  const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Gagal menghapus pemilik');
+}

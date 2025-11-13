@@ -41,7 +41,7 @@ export default function TowerEdit() {
         </div>
         <div style={{ marginTop: 15 }}>
           <button type="submit">Simpan</button>
-          <button type="button" onClick={() => navigate(`/flat/${flat_id}/towers`)} style={{ marginLeft: 10 }}>Kembali</button>
+          <button type="button" onClick={() => navigate(`/tower`)} style={{ marginLeft: 10 }}>Kembali</button>
         </div>
       </form>
     </div>
