@@ -1,30 +1,46 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createFloor, getAllTower } from '../api';
+import { createFloor, getAllTower, getFlats } from '../api';
 
 export default function FloorForm() {
   const [form, setForm] = useState({
     floor_id: '',
     floor_number: '',
     tower_id: '',
+    flat_id: '',
   });
 
   const [towers, setTowers] = useState([]);
+  const [filteredTowers, setFilteredTowers] = useState([]);
+  const [flats, setFlats] = useState([]);
   const navigate = useNavigate();
 
-  // Ambil daftar tower
+  // Ambil daftar rusun (flat) dan tower
   useEffect(() => {
-    const loadTowers = async () => {
+    const loadData = async () => {
       try {
+        const flatData = await getFlats();
         const towerData = await getAllTower();
+        setFlats(flatData);
         setTowers(towerData);
       } catch (err) {
-        alert('Gagal memuat daftar tower.');
+        alert('Gagal memuat data.');
         console.error(err);
       }
     };
-    loadTowers();
+    loadData();
   }, []);
+
+  // Filter tower berdasarkan rusun (flat) yang dipilih
+  useEffect(() => {
+    if (form.flat_id) {
+      const filtered = towers.filter((t) => t.flat_id === form.flat_id);
+      setFilteredTowers(filtered);
+      setForm((prev) => ({ ...prev, tower_id: '' })); // reset tower
+    } else {
+      setFilteredTowers([]);
+    }
+  }, [form.flat_id, towers]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -33,7 +49,7 @@ export default function FloorForm() {
     try {
       await createFloor(form);
       alert('✅ Lantai berhasil ditambahkan.');
-      navigate('/floor');
+      navigate('/unit/add');
     } catch (err) {
       alert('❌ Gagal menambah lantai.');
       console.error(err);
@@ -44,6 +60,7 @@ export default function FloorForm() {
     <div style={container}>
       <h2>Tambah Lantai</h2>
       <form onSubmit={handleSubmit} id="floorForm" style={formStyle}>
+        {/* ID Floor */}
         <div style={row}>
           <label htmlFor="floor_id" style={labelStyle}>ID Lantai</label>
           <input
@@ -56,6 +73,7 @@ export default function FloorForm() {
           />
         </div>
 
+        {/* Nomor Floor */}
         <div style={row}>
           <label htmlFor="floor_number" style={labelStyle}>Nomor Lantai</label>
           <input
@@ -68,18 +86,42 @@ export default function FloorForm() {
           />
         </div>
 
+        {/* Pilih Rusun */}
         <div style={row}>
-          <label htmlFor="tower_id" style={labelStyle}>Tower</label>
+          <label htmlFor="flat_id" style={labelStyle}>Pilih Rusun</label>
+          <select
+            id="flat_id"
+            name="flat_id"
+            value={form.flat_id}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          >
+            <option value="">-- Pilih Rusun --</option>
+            {flats.map((f) => (
+              <option key={f.flat_id} value={f.flat_id}>
+                {f.flat_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Pilih Tower */}
+        <div style={row}>
+          <label htmlFor="tower_id" style={labelStyle}>Pilih Tower</label>
           <select
             id="tower_id"
             name="tower_id"
             value={form.tower_id}
             onChange={handleChange}
             required
+            disabled={!form.flat_id}
             style={inputStyle}
           >
-            <option value="">-- Pilih Tower --</option>
-            {towers.map((t) => (
+            <option value="">
+              {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun Terlebih Dahulu'}
+            </option>
+            {filteredTowers.map((t) => (
               <option key={t.tower_id} value={t.tower_id}>
                 {t.tower_name} ({t.tower_id})
               </option>
@@ -88,8 +130,11 @@ export default function FloorForm() {
         </div>
       </form>
 
+      {/* Tombol Simpan & Batal */}
       <div style={{ marginTop: 16 }}>
-        <button type="submit" form="floorForm" style={btnSimpan}>Simpan</button>
+        <button type="submit" form="floorForm" style={btnSimpan}>
+          Simpan
+        </button>
         <button
           type="button"
           onClick={() => navigate('/floor')}

@@ -33,7 +33,7 @@ export default function TowerForm() {
     try {
       await createTower(form);
       alert('✅ Tower berhasil ditambahkan.');
-      navigate(`/floor/add?tower_id=${form.tower_id}&flat_id=${form.flat_id}`);
+      navigate(`/floor/add`);
     } catch (err) {
       console.error(err);
       alert('❌ Gagal menambah tower.');

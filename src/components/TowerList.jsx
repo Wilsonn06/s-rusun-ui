@@ -102,13 +102,13 @@ export default function TowerList() {
                     <td
                       onClick={(e) => e.stopPropagation()} // supaya klik tombol tidak ikut buka detail
                     >
-                      <button
-                        onClick={() =>
-                          navigate(`/flat/${t.flat_id}/tower/edit/${t.tower_id}`)
-                        }
-                      >
-                        Edit
-                      </button>
+                     <button
+  onClick={() =>
+    navigate(`/tower/edit/${t.tower_id}`)
+  }
+>
+  Edit
+</button>
                       <button
                         onClick={() => handleDelete(t.tower_id)}
                         style={{ marginLeft: 8 }}

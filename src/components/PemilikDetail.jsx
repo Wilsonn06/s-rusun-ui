@@ -36,7 +36,6 @@ export default function PemilikDetail() {
       <p><strong>Alamat:</strong> {pemilik.alamat || '-'}</p>
       <p><strong>Unit Dimiliki:</strong> {pemilik.unit_ids || '-'}</p>
 
-      <Link to="/pemilik">← Kembali</Link>
     </div>
   );
 }

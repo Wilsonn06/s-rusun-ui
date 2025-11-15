@@ -14,8 +14,7 @@ export default function FlatForm() {
       await createFlat(form);
       alert('Flat berhasil ditambahkan.');
 
-      // 🟢 Arahkan ke TowerForm sambil kirim flat_id
-      navigate(`/tower/add?flat_id=${form.flat_id}`);
+      navigate(`/tower/add`);
     } catch {
       alert('Gagal menambah flat.');
     }

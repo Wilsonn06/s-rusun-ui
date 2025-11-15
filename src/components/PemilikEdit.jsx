@@ -18,7 +18,13 @@ export default function PemilikEdit() {
       try {
         const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`);
         const data = await res.json();
-        setForm(data);
+        setForm({
+  ...data,
+  tanggal_lahir: data.tanggal_lahir 
+    ? data.tanggal_lahir.substring(0, 10)   // ambil hanya yyyy-mm-dd
+    : ''
+});
+
       } catch {
         alert('Gagal memuat data pemilik');
       }

@@ -13,16 +13,35 @@ export default function TowerEdit() {
       .catch(() => alert('Gagal memuat data tower.'));
   }, [tower_id]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateTower(tower_id, { ...form, flat_id });
+      // Jika nested → kirim flat_id
+      // Jika global → jangan kirim flat_id
+      const payload = flat_id ? { ...form, flat_id } : form;
+
+      await updateTower(tower_id, payload);
       alert('Tower berhasil diperbarui.');
-      navigate(`/flat/${flat_id}/towers`);
+
+      // Redirect sesuai mode
+      if (flat_id) {
+        navigate(`/flat/${flat_id}/tower`);
+      } else {
+        navigate(`/tower`);
+      }
     } catch {
       alert('Gagal memperbarui tower.');
+    }
+  };
+
+  const handleBack = () => {
+    if (flat_id) {
+      navigate(`/flat/${flat_id}/tower`);
+    } else {
+      navigate(`/tower`);
     }
   };
 
@@ -39,9 +58,12 @@ export default function TowerEdit() {
             required
           />
         </div>
+
         <div style={{ marginTop: 15 }}>
           <button type="submit">Simpan</button>
-          <button type="button" onClick={() => navigate(`/tower`)} style={{ marginLeft: 10 }}>Kembali</button>
+          <button type="button" onClick={handleBack} style={{ marginLeft: 10 }}>
+            Kembali
+          </button>
         </div>
       </form>
     </div>
