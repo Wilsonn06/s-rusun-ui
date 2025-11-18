@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GATEWAY_BASE } from "../api";
 
 export default function PemilikDetailApp() {
   const pemilik_id = "PM001"; // Hardcode untuk user yang sedang login
@@ -10,7 +11,7 @@ export default function PemilikDetailApp() {
   useEffect(() => {
     async function fetchPemilik() {
       try {
-        const res = await fetch(`http://localhost:3002/pemilik/${pemilik_id}`);
+        const res = await fetch(`${GATEWAY_BASE}/app/pemilik/${pemilik_id}`);
         const data = await res.json();
 
         if (!res.ok) {
@@ -18,7 +19,7 @@ export default function PemilikDetailApp() {
           return;
         }
 
-        setPemilik(data.data);
+        setPemilik(data.data || data);
       } catch (err) {
         setError("Gagal terhubung ke server.");
       } finally {
@@ -29,46 +30,27 @@ export default function PemilikDetailApp() {
     fetchPemilik();
   }, []);
 
-  if (loading) return <div className="p-6 text-center">Memuat data...</div>;
-
-  if (error)
-    return (
-      <div className="p-6 text-red-600 text-center font-semibold">{error}</div>
-    );
+  if (loading) return <div className="muted">Memuat data...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Data Pemilik</h1>
-
-      <div className="bg-white shadow p-5 rounded-lg border">
-        <div className="mb-3">
-          <span className="font-semibold">ID Pemilik:</span> {pemilik.pemilik_id}
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Data Pemilik</h1>
         </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">Nama:</span> {pemilik.nama}
-        </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">NIK:</span> {pemilik.nik}
-        </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">Tanggal Lahir:</span>{" "}
-          {pemilik.tanggal_lahir}
-        </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">Jenis Kelamin:</span>{" "}
-          {pemilik.jenis_kelamin === "L" ? "Laki-laki" : "Perempuan"}
-        </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">No HP:</span> {pemilik.no_hp}
-        </div>
-
-        <div className="mb-3">
-          <span className="font-semibold">Alamat:</span> {pemilik.alamat}
+        <div className="card">
+          <div className="card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div><strong>ID Pemilik:</strong> {pemilik.pemilik_id}</div>
+              <div><strong>Nama:</strong> {pemilik.nama}</div>
+              <div><strong>NIK:</strong> {pemilik.nik}</div>
+              <div><strong>Tanggal Lahir:</strong> {pemilik.tanggal_lahir}</div>
+              <div><strong>Jenis Kelamin:</strong> {pemilik.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
+              <div><strong>No HP:</strong> {pemilik.no_hp}</div>
+              <div style={{ gridColumn: '1 / -1' }}><strong>Alamat:</strong> {pemilik.alamat}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ import FloorListApp from "./components_app/FloorListApp";
 import PemilikDetailApp from "./components_app/PemilikDetailApp";
 
 import SidebarApp from "./components_app/SidebarApp";
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/SideBar';
 
 
 // =======================================================

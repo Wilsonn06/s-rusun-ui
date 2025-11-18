@@ -20,7 +20,7 @@ export default function FlatEdit() {
     try {
       await updateFlat(flat_id, form);
       alert('Flat berhasil diperbarui.');
-      navigate('/');
+      navigate('/flat');
     } catch {
       alert('Gagal memperbarui flat.');
     }
@@ -28,37 +28,49 @@ export default function FlatEdit() {
 
   const handleCancel = () => {
     // Navigasi kembali ke halaman list tanpa menyimpan
-    navigate('/');
+    navigate('/flat');
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Edit Flat</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nama Flat:</label><br />
-          <input
-            name="flat_name"
-            value={form.flat_name}
-            onChange={handleChange}
-            required
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Edit Rumah Susun</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={handleCancel}>Batal</button>
+            <button className="btn btn-primary" form="flatEditForm" type="submit">Simpan</button>
+          </div>
         </div>
 
-        <div>
-          <label>Alamat:</label><br />
-          <input
-            name="flat_address"
-            value={form.flat_address}
-            onChange={handleChange}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form id="flatEditForm" onSubmit={handleSubmit} className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_name">Nama Rusun</label>
+                <input
+                  id="flat_name"
+                  className="form-control"
+                  name="flat_name"
+                  value={form.flat_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-        <div style={{ marginTop: 15 }}>
-          <button type="submit" style={{ marginRight: 10 }}>Simpan</button>
-          <button type="button" onClick={handleCancel}>Kembali</button>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_address">Alamat</label>
+                <input
+                  id="flat_address"
+                  className="form-control"
+                  name="flat_address"
+                  value={form.flat_address}
+                  onChange={handleChange}
+                />
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

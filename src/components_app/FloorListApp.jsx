@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GATEWAY_BASE } from "../api";
 
 export default function FloorListApp() {
   const [floors, setFloors] = useState([]);
@@ -8,11 +9,11 @@ export default function FloorListApp() {
   useEffect(() => {
     const fetchFloors = async () => {
       try {
-        const res = await fetch("http://localhost:3002/floor");
+        const res = await fetch(`${GATEWAY_BASE}/app/floor`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil floor");
-        else setFloors(data.data || []);
+        else setFloors(data.data || data || []);
       } catch (err) {
         setError("Kesalahan jaringan");
       }
@@ -22,20 +23,45 @@ export default function FloorListApp() {
     fetchFloors();
   }, []);
 
-  if (loading) return <p>Loading floor...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <div className="muted">Loading floor...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Floor Anda</h2>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Lantai Anda</h1>
+        </div>
 
-      <ul>
-        {floors.map(f => (
-          <li key={f.floor_id}>
-            Lantai {f.floor_number} (ID: {f.floor_id})
-          </li>
-        ))}
-      </ul>
+        <div className="card">
+          <div className="card-body">
+            {floors.length === 0 ? (
+              <div className="muted">Tidak ada lantai terdaftar.</div>
+            ) : (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Floor</th>
+                    <th>Lantai</th>
+                    <th>Tower</th>
+                    <th>Rusun</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {floors.map((f) => (
+                    <tr key={f.floor_id}>
+                      <td>{f.floor_id}</td>
+                      <td>{f.floor_number}</td>
+                      <td>{f.tower_name || '-'}</td>
+                      <td>{f.flat_name || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

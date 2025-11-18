@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GATEWAY_BASE } from "../api";
 
 export default function FlatListApp() {
   const [flats, setFlats] = useState([]);
@@ -8,39 +9,61 @@ export default function FlatListApp() {
   useEffect(() => {
     const fetchFlats = async () => {
       try {
-        const res = await fetch("http://localhost:3002/flat");
+        const res = await fetch(`${GATEWAY_BASE}/app/flat`);
         const data = await res.json();
 
         if (!res.ok) {
           setError("Gagal mengambil flat");
         } else {
-          setFlats(data.data || []);
+          // sesuaikan dengan bentuk response backend APP
+          setFlats(data.data || data || []);
         }
       } catch (err) {
+        console.error(err);
         setError("Kesalahan jaringan");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchFlats();
   }, []);
 
-  if (loading) return <p>Loading flat...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <div className="muted">Loading flat...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Flat Anda</h2>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Flat Anda</h1>
+        </div>
 
-      {flats.length === 0 && <p>Tidak ada flat terdaftar.</p>}
-
-      <ul>
-        {flats.map(f => (
-          <li key={f.flat_id}>
-            {f.flat_name} (ID: {f.flat_id})
-          </li>
-        ))}
-      </ul>
+        <div className="card">
+          <div className="card-body">
+            {flats.length === 0 ? (
+              <div className="muted">Tidak ada flat terdaftar.</div>
+            ) : (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Rusun</th>
+                    <th>Rusun</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {flats.map((f) => (
+                    <tr key={f.flat_id}>
+                      <td>{f.flat_id}</td>
+                      <td>{f.flat_name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

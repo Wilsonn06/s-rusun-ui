@@ -1,9 +1,10 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getUnitDetail, getDevicesByUnit } from '../api';
 
 export default function UnitDetail() {
   const { unit_id } = useParams();
+  const navigate = useNavigate();
 
   const [unit, setUnit] = useState(null);
   const [devices, setDevices] = useState([]);
@@ -23,55 +24,86 @@ export default function UnitDetail() {
       .finally(() => setLoadingDevices(false));
   }, [unit_id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (!unit) return <p>Unit tidak ditemukan.</p>;
+  if (loading) return <div className="muted">Loading...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (!unit) return <div className="muted">Unit tidak ditemukan.</div>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Detail Unit</h2>
-      <p><b>ID:</b> {unit.unit_id}</p>
-      <p><b>Nomor Unit:</b> {unit.unit_number}</p>
-      <p><b>Floor:</b> {unit.floor_number}</p>
-      <p><b>Rusun:</b> {unit.flat_name}</p>
-      <p>
-        <b>Pemilik ID:</b>{" "}
-        {unit.pemilik_id ? (
-          <Link to={`/pemilik/${unit.pemilik_id}`} style={{ textDecoration: 'none', color: 'blue' }}>
-            {unit.pemilik_id}
-          </Link>
-        ) : (
-          "-"
-        )}
-      </p>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Detail Unit</h1>
+          <div className="actions">
+            <button className="btn" onClick={() => navigate('/unit')}>Kembali</button>
+            <button className="btn btn-primary" onClick={() => navigate(`/unit/edit/${unit.unit_id}`)}>Edit</button>
+          </div>
+        </div>
 
-      <hr />
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: 8 }}>
+              <div className="muted">ID</div>
+              <div>{unit.unit_id}</div>
+              <div className="muted">Nomor Unit</div>
+              <div>{unit.unit_number}</div>
+              <div className="muted">Nomor Lantai</div>
+              <div>{unit.floor_number}</div>
+              <div className="muted">Tower</div>
+              <div>{unit.tower_name || '-'}</div>
+              <div className="muted">Rusun</div>
+              <div>{unit.flat_name}</div>
+              <div className="muted">Pemilik ID</div>
+              <div>
+                {unit.pemilik_id ? (
+                  <Link className="link-plain" to={`/pemilik/${unit.pemilik_id}`}>{unit.pemilik_id}</Link>
+                ) : (
+                  '-'
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <h3>Daftar Sensor / Devices</h3>
-
-      {loadingDevices && <p>Memuat sensor...</p>}
-
-      {!loadingDevices && devices.length === 0 && (
-        <p>Tidak ada sensor pada unit ini.</p>
-      )}
-
-      {!loadingDevices && devices.length > 0 && (
-        <ul>
-          {devices.map(dev => (
-            <li key={dev.device_id} style={{ marginBottom: 5 }}>
-              <Link to={`/devices/${dev.device_id}`} style={{ textDecoration: 'none' }}>
-                <b>{dev.device_name}</b>
-              </Link>
-              {" — "}
-              {dev.device_type}
-              {" — "}
-              <span style={{ color: dev.status === "active" ? "green" : "red" }}>
-                {dev.status}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+        <div className="section-title">Daftar Sensor / Devices</div>
+        <div className="card">
+          <div className="card-body">
+            {loadingDevices && <div className="muted">Memuat sensor...</div>}
+            {!loadingDevices && devices.length === 0 && (
+              <div className="muted">Tidak ada sensor pada unit ini.</div>
+            )}
+            {!loadingDevices && devices.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Tipe</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {devices.map((dev) => (
+                    <tr key={dev.device_id}>
+                      <td>{dev.device_id}</td>
+                      <td>
+                        <Link className="link-plain" to={`/devices/${dev.device_id}`}>
+                          {dev.device_name}
+                        </Link>
+                      </td>
+                      <td>{dev.device_type}</td>
+                      <td>
+                        <span className={`badge ${dev.status === 'active' ? 'badge-success' : (dev.status ? 'badge-danger' : 'badge-muted')}`}>
+                          {dev.status || 'unknown'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

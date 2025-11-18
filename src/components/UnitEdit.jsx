@@ -78,124 +78,66 @@ export default function UnitEdit() {
     }
   };
 
-  if (loading) return <p>Memuat data...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return <div className="muted">Memuat data...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Edit Unit</h2>
-
-      <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
-        {/* ID Unit */}
-        <div style={{ marginBottom: 10 }}>
-          <label>ID Unit:</label>
-          <input
-            type="text"
-            name="unit_id"
-            value={form.unit_id}
-            disabled
-            style={{ width: '100%' }}
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Edit Unit</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={() => navigate('/unit')}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="unitEditForm">Simpan</button>
+          </div>
         </div>
 
-        {/* Nomor Unit */}
-        <div style={{ marginBottom: 10 }}>
-          <label>Nomor Unit:</label>
-          <input
-            type="text"
-            name="unit_number"
-            value={form.unit_number}
-            onChange={handleChange}
-            required
-            style={{ width: '100%' }}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form id="unitEditForm" onSubmit={handleSubmit} className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="unit_id">ID Unit</label>
+                <input id="unit_id" type="text" name="unit_id" value={form.unit_id} disabled className="form-control" />
+              </div>
 
-        {/* Floor */}
-        <div style={{ marginBottom: 10 }}>
-          <label>Pilih Floor:</label>
-          <select
-            name="floor_id"
-            value={form.floor_id}
-            onChange={handleChange}
-            required
-            style={{ width: '100%' }}
-          >
-            <option value="">-- Pilih Floor --</option>
-            {floors.map((f) => (
-              <option key={f.floor_id} value={f.floor_id}>
-                {f.floor_number}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="unit_number">Nomor Unit</label>
+                <input id="unit_number" type="text" name="unit_number" value={form.unit_number} onChange={handleChange} required className="form-control" />
+              </div>
 
-        {/* Flat */}
-        <div style={{ marginBottom: 10 }}>
-          <label>Pilih Rusun (Flat):</label>
-          <select
-            name="flat_id"
-            value={form.flat_id}
-            onChange={handleChange}
-            required
-            style={{ width: '100%' }}
-          >
-            <option value="">-- Pilih Flat --</option>
-            {flats.map((fl) => (
-              <option key={fl.flat_id} value={fl.flat_id}>
-                {fl.flat_name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_id">Pilih Floor</label>
+                <select id="floor_id" name="floor_id" value={form.floor_id} onChange={handleChange} required className="form-control">
+                  <option value="">-- Pilih Floor --</option>
+                  {floors.map((f) => (
+                    <option key={f.floor_id} value={f.floor_id}>{f.floor_number}</option>
+                  ))}
+                </select>
+              </div>
 
-        {/* Pemilik */}
-        <div style={{ marginBottom: 10 }}>
-          <label>Pemilik Unit:</label>
-          <select
-            name="pemilik_id"
-            value={form.pemilik_id}
-            onChange={handleChange}
-            style={{ width: '100%' }}
-          >
-            <option value="">-- Belum Ada Pemilik --</option>
-            {pemiliks.map((p) => (
-              <option key={p.pemilik_id} value={p.pemilik_id}>
-                {p.nama} ({p.pemilik_id})
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun (Flat)</label>
+                <select id="flat_id" name="flat_id" value={form.flat_id} onChange={handleChange} required className="form-control">
+                  <option value="">-- Pilih Flat --</option>
+                  {flats.map((fl) => (
+                    <option key={fl.flat_id} value={fl.flat_id}>{fl.flat_name}</option>
+                  ))}
+                </select>
+              </div>
 
-        <button
-          type="submit"
-          style={{
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            borderRadius: 4,
-          }}
-        >
-          Simpan Perubahan
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/unit')}
-          style={{
-            marginLeft: 10,
-            backgroundColor: '#6c757d',
-            color: 'white',
-            border: 'none',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            borderRadius: 4,
-          }}
-        >
-          Batal
-        </button>
-      </form>
+              <div className="form-row">
+                <label className="form-label" htmlFor="pemilik_id">Pemilik Unit</label>
+                <select id="pemilik_id" name="pemilik_id" value={form.pemilik_id} onChange={handleChange} className="form-control">
+                  <option value="">-- Belum Ada Pemilik --</option>
+                  {pemiliks.map((p) => (
+                    <option key={p.pemilik_id} value={p.pemilik_id}>{p.nama} ({p.pemilik_id})</option>
+                  ))}
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

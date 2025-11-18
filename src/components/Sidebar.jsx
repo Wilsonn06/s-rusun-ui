@@ -12,61 +12,23 @@ export default function Sidebar() {
     { path: '/pemilik', label: 'Pemilik' },
   ];
 
+  const isActive = (path) => location.pathname.startsWith(path);
+
   return (
-    <div style={sidebarStyle}>
-      <h2 style={titleStyle}>S-Rusun</h2>
-      <ul style={ulStyle}>
+    <aside className="sidebar" role="navigation" aria-label="Sidebar Navigation">
+      <h2 className="sidebar-title">S-Rusun</h2>
+      <ul className="nav-list">
         {menus.map((menu) => (
-          <li key={menu.path}>
+          <li className="nav-item" key={menu.path}>
             <Link
               to={menu.path}
-              style={{
-                ...linkStyle,
-                ...(location.pathname.startsWith(menu.path) ? activeLink : {}),
-              }}
+              className={`nav-link ${isActive(menu.path) ? 'active' : ''}`}
             >
               {menu.label}
             </Link>
           </li>
         ))}
       </ul>
-    </div>
+    </aside>
   );
 }
-
-const sidebarStyle = {
-  width: '220px',
-  height: '100vh',
-  backgroundColor: '#fff',
-  color: '#861414ff',
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  padding: '20px',
-  boxSizing: 'border-box',
-};
-
-const titleStyle = {
-  fontSize: '20px',
-  marginBottom: '20px',
-};
-
-const ulStyle = {
-  listStyle: 'none',
-  padding: 0,
-  margin: 0,
-};
-
-const linkStyle = {
-  display: 'block',
-  padding: '10px 12px',
-  color: '#000000ff',
-  textDecoration: 'none',
-  borderRadius: '6px',
-  marginBottom: '8px',
-  transition: 'background 0.2s',
-};
-
-const activeLink = {
-  backgroundColor: '#c46b6bff',
-};

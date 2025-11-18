@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { GATEWAY_BASE } from "../api";
 
 export default function DeviceDetail() {
   const { device_id } = useParams();
@@ -8,24 +9,50 @@ export default function DeviceDetail() {
   const [device, setDevice] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/devices/detail/${device_id}`)
-
+    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => setDevice(data))
       .catch(() => alert("Gagal memuat device"));
   }, [device_id]);
 
-  if (!device) return <p>Memuat...</p>;
+  if (!device) return <div className="page"><div className="container"><div className="muted">Memuat...</div></div></div>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Detail Device</h2>
-      <p><strong>Nama:</strong> {device.device_name}</p>
-      <p><strong>Tipe:</strong> {device.device_type}</p>
-      <p><strong>Status:</strong> {device.status}</p>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Detail Device</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={() => navigate('/devices')}>Kembali</button>
+            <button className="btn btn-primary" type="button" onClick={() => navigate(`/devices/edit/${device_id}`)}>Edit</button>
+          </div>
+        </div>
 
-      <h3>Informasi ID:</h3>
-      <pre>{JSON.stringify(device, null, 2)}</pre>
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: 8 }}>
+              <div className="muted">ID</div>
+              <div>{device.device_id || '-'}</div>
+              <div className="muted">Nama</div>
+              <div>{device.device_name}</div>
+              <div className="muted">Tipe</div>
+              <div>{device.device_type}</div>
+              <div className="muted">Status</div>
+              <div>{device.status || '-'}</div>
+              <div className="muted">Unit</div>
+              <div>
+                {device.unit_id ? (
+                  <Link className="link-plain" to={`/unit/${device.unit_id}`}>
+                    {device.unit_number || device.unit_id}
+                  </Link>
+                ) : (
+                  '-'
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

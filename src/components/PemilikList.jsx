@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { GATEWAY_BASE } from '../api';
 
 export default function PemilikList() {
   const [pemilik, setPemilik] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchPemilik = async () => {
     try {
-      const res = await fetch('http://localhost:3001/pemilik');
+      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik`);
+      if (!res.ok) {
+        setError('Gagal memuat data pemilik');
+        return;
+      }
       const data = await res.json();
       setPemilik(data);
     } catch (err) {
@@ -25,7 +31,7 @@ export default function PemilikList() {
   const handleDelete = async (pemilik_id) => {
     if (!window.confirm('Yakin ingin menghapus pemilik ini?')) return;
     try {
-      await fetch(`http://localhost:3001/pemilik/${pemilik_id}`, {
+      await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
         method: 'DELETE',
       });
       fetchPemilik();
@@ -34,41 +40,51 @@ export default function PemilikList() {
     }
   };
 
-  if (loading) return <p>Memuat data...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
-    <div>
-      <h2>Daftar Pemilik</h2>
-      <Link to="/pemilik/add" className="btn btn-primary">+ Tambah Pemilik</Link>
-      <table border="1" cellPadding="8" style={{ width: '100%', marginTop: '15px' }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>NIK</th>
-            <th>No. Telepon</th>
-            <th>Unit Dimiliki</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pemilik.map(p => (
-            <tr key={p.pemilik_id}>
-              <td>{p.pemilik_id}</td>
-              <td>{p.nama}</td>
-              <td>{p.nik}</td>
-              <td>{p.no_telepon || '-'}</td>
-              <td>{p.unit_ids || '-'}</td>
-              <td>
-                <Link to={`/pemilik/${p.pemilik_id}`}>Detail</Link> |{' '}
-                <Link to={`/pemilik/edit/${p.pemilik_id}`}>Edit</Link> |{' '}
-                <button onClick={() => handleDelete(p.pemilik_id)}>Hapus</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Daftar Pemilik</h1>
+          <div className="actions">
+            <button className="btn btn-primary" onClick={() => navigate('/pemilik/add')}>+ Pemilik</button>
+          </div>
+        </div>
+
+        {loading && <div className="muted">Memuat data...</div>}
+        {error && <div style={{ color: 'red' }}>{error}</div>}
+
+        {!loading && !error && (
+          <div className="card">
+            <div className="card-body">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Pemilik</th>
+                    <th>Nama Pemilik</th>
+                    <th>Unit Dimiliki</th>
+                    <th style={{ width: 160 }}>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pemilik.map((p) => (
+                    <tr key={p.pemilik_id}>
+                      <td>{p.pemilik_id}</td>
+                      <td>
+                        <Link to={`/pemilik/${p.pemilik_id}`} className="link-plain">{p.nama}</Link>
+                      </td>
+                      <td>{p.unit_ids || '-'}</td>
+                      <td>
+                        <button className="btn btn-sm" onClick={() => navigate(`/pemilik/edit/${p.pemilik_id}`)}>Edit</button>{' '}
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(p.pemilik_id)}>Hapus</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

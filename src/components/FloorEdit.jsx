@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getFloorDetail, createFloor } from '../api'; // pastikan sudah ada updateFloor di ../api
-import { getAllTower } from '../api';
-import { getFlats } from '../api';
+import { getFloorDetail, getAllTower, getFlats, updateFloor } from '../api';
 
 export default function FloorEdit() {
   const { floor_id } = useParams();
@@ -47,14 +45,7 @@ export default function FloorEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:3001/floor/${floor_id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) throw new Error('Gagal memperbarui lantai');
-
+      await updateFloor(floor_id, form);
       alert('Lantai berhasil diperbarui.');
       navigate('/floor');
     } catch (err) {
@@ -64,82 +55,85 @@ export default function FloorEdit() {
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 400, margin: '0 auto' }}>
-      <h2>Edit Lantai</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 10 }}>
-          <label>ID Lantai</label>
-          <input
-            name="floor_id"
-            value={form.floor_id}
-            readOnly
-            style={{ width: '100%', padding: 6, backgroundColor: '#eee' }}
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Edit Lantai</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={() => navigate('/floor')}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="floorEditForm">Simpan</button>
+          </div>
         </div>
 
-        <div style={{ marginBottom: 10 }}>
-          <label>Nomor Lantai</label>
-          <input
-            name="floor_number"
-            value={form.floor_number}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: 6 }}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form id="floorEditForm" onSubmit={handleSubmit} className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_id">ID Lantai</label>
+                <input
+                  id="floor_id"
+                  name="floor_id"
+                  value={form.floor_id}
+                  readOnly
+                  className="form-control"
+                />
+              </div>
 
-        <div style={{ marginBottom: 10 }}>
-          <label>Rusun</label>
-          <select
-            name="flat_id"
-            value={form.flat_id}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: 6 }}
-          >
-            <option value="">Pilih Rusun</option>
-            {flats.map((f) => (
-              <option key={f.flat_id} value={f.flat_id}>
-                {f.flat_name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_number">Nomor Lantai</label>
+                <input
+                  id="floor_number"
+                  name="floor_number"
+                  value={form.floor_number}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        <div style={{ marginBottom: 10 }}>
-          <label>Tower</label>
-          <select
-            name="tower_id"
-            value={form.tower_id}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: 6 }}
-          >
-            <option value="">Pilih Tower</option>
-            {towers
-              .filter((t) => t.flat_id === form.flat_id)
-              .map((t) => (
-                <option key={t.tower_id} value={t.tower_id}>
-                  {t.tower_name}
-                </option>
-              ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_id">Rusun</label>
+                <select
+                  id="flat_id"
+                  name="flat_id"
+                  value={form.flat_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">Pilih Rusun</option>
+                  {flats.map((f) => (
+                    <option key={f.flat_id} value={f.flat_id}>
+                      {f.flat_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <button
-          type="submit"
-          style={{
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            borderRadius: 4,
-          }}
-        >
-          Simpan Perubahan
-        </button>
-      </form>
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_id">Tower</label>
+                <select
+                  id="tower_id"
+                  name="tower_id"
+                  value={form.tower_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">Pilih Tower</option>
+                  {towers
+                    .filter((t) => t.flat_id === form.flat_id)
+                    .map((t) => (
+                      <option key={t.tower_id} value={t.tower_id}>
+                        {t.tower_name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

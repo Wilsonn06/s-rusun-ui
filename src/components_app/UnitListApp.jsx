@@ -1,94 +1,80 @@
-  import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { GATEWAY_BASE } from "../api";
 
-  export default function UnitListApp() {
-    const [units, setUnits] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+export default function UnitListApp() {
+  const [units, setUnits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    // Ambil unit dari modul app
-    const fetchUnits = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("http://localhost:3002/unit");
-        const data = await res.json();
+  const fetchUnits = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${GATEWAY_BASE}/app/unit`);
+      const data = await res.json();
 
-        if (!res.ok) {
-          setError(data.message || "Gagal memuat data unit");
-          setLoading(false);
-          return;
-        }
-
-        setUnits(data.data || []);
+      if (!res.ok) {
+        setError(data.message || "Gagal memuat data unit");
         setLoading(false);
-      } catch (err) {
-        setError("Terjadi kesalahan saat mengambil data unit");
-        setLoading(false);
+        return;
       }
-    };
 
-    useEffect(() => {
-      fetchUnits();
-    }, []);
+      setUnits(data.data || data || []);
+      setLoading(false);
+    } catch (err) {
+      setError("Terjadi kesalahan saat mengambil data unit");
+      setLoading(false);
+    }
+  };
 
-    if (loading) return <p>Loading data unit...</p>;
-    if (error) return <p style={{ color: "red" }}>{error}</p>;
+  useEffect(() => {
+    fetchUnits();
+  }, []);
 
-    return (
-      <div style={{ padding: "20px" }}>
-        <h2>Unit Anda</h2>
-        <p>Total unit: {units.length}</p>
+  if (loading) return <div className="muted">Loading unit...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
-        {/* Jika tidak ada unit */}
-        {units.length === 0 && <p>Anda belum memiliki unit.</p>}
+  return (
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Unit Anda</h1>
+        </div>
 
-        <div style={styles.grid}>
-          {units.map((unit) => (
-            <div key={unit.unit_id} style={styles.card}>
-              <h3>{unit.unit_number}</h3>
-
-              <p><strong>Unit ID:</strong> {unit.unit_id}</p>
-              <p><strong>Tower:</strong> {unit.tower_name || "Tidak ada data"}</p>
-              <p><strong>Floor:</strong> {unit.floor_number || "Tidak ada data"}</p>
-              <p><strong>Flat:</strong> {unit.flat_name || "Tidak ada data"}</p>
-
-              {/* Tombol detail */}
-              <button
-                style={styles.button}
-                onClick={() => {
-                  window.location.href = `/app/unit/${unit.unit_id}`;
-                }}
-              >
-                Lihat Detail
-              </button>
-            </div>
-          ))}
+        <div className="card">
+          <div className="card-body">
+            {units.length === 0 ? (
+              <div className="muted">Tidak ada unit terdaftar.</div>
+            ) : (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Unit</th>
+                    <th>Nomor Unit</th>
+                    <th>Lantai</th>
+                    <th>Tower</th>
+                    <th>Rusun</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {units.map((u) => (
+                    <tr key={u.unit_id}>
+                      <td>{u.unit_id}</td>
+                      <td>
+                        <a className="link-plain" href={`/app/unit/${u.unit_id}`}>
+                          {u.unit_number}
+                        </a>
+                      </td>
+                      <td>{u.floor_number || '-'}</td>
+                      <td>{u.tower_name || '-'}</td>
+                      <td>{u.flat_name || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
-    );
-  }
-
-  // Styling sederhana
-  const styles = {
-    grid: {
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-      gap: "16px",
-      marginTop: "20px",
-    },
-    card: {
-      padding: "15px",
-      borderRadius: "10px",
-      border: "1px solid #ddd",
-      background: "#fafafa",
-      boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
-    },
-    button: {
-      marginTop: "10px",
-      padding: "8px 12px",
-      background: "#4F46E5",
-      color: "#fff",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-    },
-  };
+    </div>
+  );
+}

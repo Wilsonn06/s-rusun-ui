@@ -46,26 +46,34 @@ export default function TowerEdit() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Edit Tower</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nama Tower:</label><br />
-          <input
-            name="tower_name"
-            value={form.tower_name}
-            onChange={handleChange}
-            required
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Edit Tower</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={handleBack}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="towerEditForm">Simpan</button>
+          </div>
         </div>
 
-        <div style={{ marginTop: 15 }}>
-          <button type="submit">Simpan</button>
-          <button type="button" onClick={handleBack} style={{ marginLeft: 10 }}>
-            Kembali
-          </button>
+        <div className="card">
+          <div className="card-body">
+            <form id="towerEditForm" onSubmit={handleSubmit} className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_name">Nama Tower</label>
+                <input
+                  id="tower_name"
+                  name="tower_name"
+                  value={form.tower_name}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

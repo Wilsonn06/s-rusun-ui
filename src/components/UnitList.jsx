@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAllUnits, getUnitsByFloor, deleteUnit } from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function UnitList({ floor_id }) {
   const [units, setUnits] = useState([]);
@@ -31,58 +31,39 @@ export default function UnitList({ floor_id }) {
     }
   };
 
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
-  return (
-    <div style={{ padding: 10 }}>
-      <button
-        onClick={() =>
-          navigate(
-            floor_id
-              ? `/floor/${floor_id}/units/add`
-              : `/unit/add`
-          )
-        }
-        style={{
-          marginBottom: 10,
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '6px 12px',
-          cursor: 'pointer',
-          borderRadius: 4,
-        }}
-      >
-        + Tambah Unit
-      </button>
-
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
+  const table = (
+    <table className="table">
+      <thead>
+        <tr>
+          <th>ID Unit</th>
+          <th>Nomor Unit</th>
+          <th>Lantai</th>
+          <th>Tower</th>
+          <th>Rusun</th>
+          <th style={{ width: 160 }}>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {units.length === 0 ? (
           <tr>
-            <th>ID</th>
-            <th>Nomor Unit</th>
-            <th>Floor</th>
-            <th>Rusun</th>
-            <th>Aksi</th>
+            <td colSpan="6" className="muted">Belum ada unit.</td>
           </tr>
-        </thead>
-        <tbody>
-          {units.length === 0 ? (
-            <tr><td colSpan="5">Belum ada unit.</td></tr>
-          ) : (
-            units.map(u => (
-              <tr key={u.unit_id}>
-                <td>{u.unit_id}</td>
-                <td
-                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
-                  onClick={() => navigate(`/unit/${u.unit_id}`)}
-                >
-                  {u.unit_number}
-                </td>
-                <td>{u.floor_number}</td>
-                <td>{u.flat_name}</td>
-                <td>
+        ) : (
+          units.map(u => (
+            <tr key={u.unit_id}>
+              <td>{u.unit_id}</td>
+              <td>
+                <Link className="link-plain" to={`/unit/${u.unit_id}`}>{u.unit_number}</Link>
+              </td>
+              <td>{u.floor_number}</td>
+              <td>{u.tower_name || '-'}</td>
+              <td>{u.flat_name}</td>
+              <td>
+                <div className="actions">
                   <button
+                    className="btn btn-sm"
                     onClick={() => navigate(
                       floor_id
                         ? `/floor/${floor_id}/units/edit/${u.unit_id}`
@@ -92,17 +73,40 @@ export default function UnitList({ floor_id }) {
                     Edit
                   </button>
                   <button
+                    className="btn btn-sm btn-danger"
                     onClick={() => handleDelete(u.unit_id)}
-                    style={{ marginLeft: 8 }}
                   >
                     Hapus
                   </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+                </div>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  );
+
+  if (floor_id) {
+    return table;
+  }
+
+  return (
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Daftar Unit</h1>
+          <div className="actions">
+            <button className="btn btn-primary" onClick={() => navigate('/unit/add')}>+ Unit</button>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-body">
+            {table}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { GATEWAY_BASE } from '../api'; // <-- JANGAN di-comment
 
 export default function DeviceList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/devices")
+    fetch(`${GATEWAY_BASE}/adm/devices`)
       .then(res => res.json())
       .then(data => setList(data.devices || []))
       .catch(() => alert("Gagal memuat device"));
@@ -18,7 +19,7 @@ export default function DeviceList() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:3001/devices/${id}`, {
+      const res = await fetch(`${GATEWAY_BASE}/adm/devices/${id}`, {
         method: "DELETE",
       });
 
@@ -39,72 +40,65 @@ export default function DeviceList() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Daftar Device</h2>
-
-      <button
-        onClick={() => navigate("/devices/add")}
-        style={{
-          padding: "10px",
-          background: "green",
-          color: "white",
-          border: 0,
-          marginTop: "10px",
-          borderRadius: "6px",
-          cursor: "pointer"
-        }}
-      >
-        + Tambah Device
-      </button>
-
-      {list.map(device => (
-        <div
-          key={device.device_id}
-          style={{
-            padding: "10px",
-            border: "1px solid #ccc",
-            marginTop: "10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}
-        >
-          <div>
-            <strong>{device.device_name}</strong> ({device.device_type})
-          </div>
-
-          <div>
-            <button
-              onClick={() => navigate(`/devices/${device.device_id}`)}
-              style={{ marginRight: "10px" }}
-            >
-              Detail
-            </button>
-
-            <button
-              onClick={() => navigate(`/devices/edit/${device.device_id}`)}
-              style={{ marginRight: "10px" }}
-            >
-              Edit
-            </button>
-
-            {/* ===== BUTTON DELETE ===== */}
-            <button
-              onClick={() => handleDelete(device.device_id)}
-              style={{
-                background: "red",
-                color: "white",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              Hapus
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Daftar Device</h1>
+          <div className="actions">
+            <button className="btn btn-primary" type="button" onClick={() => navigate('/devices/add')}>
+              + Device
             </button>
           </div>
         </div>
-      ))}
+
+        <div className="card">
+          <div className="card-body">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama</th>
+                  <th>Tipe</th>
+                  <th>Unit</th>
+                  <th>Status</th>
+                  <th style={{ width: 160 }}>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {list.map((device) => (
+                  <tr key={device.device_id}>
+                    <td>{device.device_id}</td>
+                    <td>
+                      <Link to={`/devices/${device.device_id}`} className="link-plain">
+                        {device.device_name}
+                      </Link>
+                    </td>
+                    <td>{device.device_type}</td>
+                    <td>
+                      {device.unit_id ? (
+                        <Link to={`/unit/${device.unit_id}`} className="link-plain">
+                          {device.unit_number || device.unit_id}
+                        </Link>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                    <td>{device.status || '-'}</td>
+                    <td>
+                      <button className="btn btn-sm" type="button" onClick={() => navigate(`/devices/edit/${device.device_id}`)}>
+                        Edit
+                      </button>{' '}
+                      <button className="btn btn-danger btn-sm" type="button" onClick={() => handleDelete(device.device_id)}>
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

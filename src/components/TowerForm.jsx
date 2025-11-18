@@ -40,103 +40,69 @@ export default function TowerForm() {
     }
   };
 
-  const handleCancel = () => navigate('/');
+  const handleCancel = () => navigate('/tower');
 
   return (
-    <div style={container}>
-      <h2>Tambah Tower</h2>
-      <form onSubmit={handleSubmit} id="towerForm" style={formStyle}>
-        <div style={row}>
-          <label htmlFor="tower_id" style={labelStyle}>
-            ID Tower
-          </label>
-          <input
-            id="tower_id"
-            name="tower_id"
-            value={form.tower_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Tambah Tower</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={handleCancel}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="towerForm">Simpan</button>
+          </div>
         </div>
 
-        <div style={row}>
-          <label htmlFor="tower_name" style={labelStyle}>
-            Nama Tower
-          </label>
-          <input
-            id="tower_name"
-            name="tower_name"
-            value={form.tower_name}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form onSubmit={handleSubmit} id="towerForm" className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_id">ID Tower</label>
+                <input
+                  id="tower_id"
+                  name="tower_id"
+                  value={form.tower_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        <div style={row}>
-          <label htmlFor="flat_id" style={labelStyle}>
-            Pilih Rusun
-          </label>
-          <select
-            id="flat_id"
-            name="flat_id"
-            value={form.flat_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          >
-            <option value="">-- Pilih Rusun --</option>
-            {flats.map((flat) => (
-              <option key={flat.flat_id} value={flat.flat_id}>
-                {flat.flat_name} ({flat.flat_id})
-              </option>
-            ))}
-          </select>
-        </div>
-      </form>
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_name">Nama Tower</label>
+                <input
+                  id="tower_name"
+                  name="tower_name"
+                  value={form.tower_name}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-      <div style={{ marginTop: 20 }}>
-        <button type="button" onClick={handleCancel} style={btnKembali}>
-          Kembali
-        </button>
-        <button type="submit" form="towerForm" style={btnSimpan}>
-          Simpan
-        </button>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
+                <select
+                  id="flat_id"
+                  name="flat_id"
+                  value={form.flat_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">-- Pilih Rusun --</option>
+                  {flats.map((flat) => (
+                    <option key={flat.flat_id} value={flat.flat_id}>
+                      {flat.flat_name} ({flat.flat_id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-// 🔧 Gaya sederhana
-const container = { padding: 20 };
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-  maxWidth: 400,
-};
-const row = { display: 'flex', flexDirection: 'column' };
-const labelStyle = { fontWeight: 'bold' };
-const inputStyle = {
-  padding: 8,
-  border: '1px solid #ccc',
-  borderRadius: 4,
-};
-const btnSimpan = {
-  background: '#4CAF50',
-  color: '#fff',
-  border: 'none',
-  padding: '10px 20px',
-  borderRadius: 5,
-  cursor: 'pointer',
-  marginLeft: 10,
-};
-const btnKembali = {
-  background: '#777',
-  color: '#fff',
-  border: 'none',
-  padding: '10px 20px',
-  borderRadius: 5,
-  cursor: 'pointer',
-};
+// Remove old inline style objects; using global utility classes

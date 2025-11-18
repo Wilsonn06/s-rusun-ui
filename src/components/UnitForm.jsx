@@ -90,124 +90,110 @@ export default function UnitForm() {
   };
 
   return (
-    <div style={container}>
-      <h2>Tambah Unit</h2>
-      <form onSubmit={handleSubmit} id="unitForm" style={formStyle}>
-        {/* ID Unit */}
-        <div style={row}>
-          <label style={labelStyle}>ID Unit</label>
-          <input
-            name="unit_id"
-            value={form.unit_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Tambah Unit</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={() => navigate('/unit')}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="unitForm">Simpan</button>
+          </div>
         </div>
 
-        {/* Nomor Unit */}
-        <div style={row}>
-          <label style={labelStyle}>Nomor Unit</label>
-          <input
-            name="unit_number"
-            value={form.unit_number}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form onSubmit={handleSubmit} id="unitForm" className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="unit_id">ID Unit</label>
+                <input
+                  id="unit_id"
+                  name="unit_id"
+                  value={form.unit_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        {/* Rusun */}
-        <div style={row}>
-          <label style={labelStyle}>Pilih Rusun</label>
-          <select
-            name="flat_id"
-            value={form.flat_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          >
-            <option value="">-- Pilih Rusun --</option>
-            {flats.map((flat) => (
-              <option key={flat.flat_id} value={flat.flat_id}>
-                {flat.flat_name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="unit_number">Nomor Unit</label>
+                <input
+                  id="unit_number"
+                  name="unit_number"
+                  value={form.unit_number}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        {/* Tower */}
-        <div style={row}>
-          <label style={labelStyle}>Pilih Tower</label>
-          <select
-            name="tower_id"
-            value={form.tower_id}
-            onChange={handleChange}
-            required
-            disabled={!form.flat_id}
-            style={inputStyle}
-          >
-            <option value="">
-              {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun terlebih dahulu'}
-            </option>
-            {filteredTowers.map((tower) => (
-              <option key={tower.tower_id} value={tower.tower_id}>
-                {tower.tower_name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
+                <select
+                  id="flat_id"
+                  name="flat_id"
+                  value={form.flat_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">-- Pilih Rusun --</option>
+                  {flats.map((flat) => (
+                    <option key={flat.flat_id} value={flat.flat_id}>
+                      {flat.flat_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {/* Floor */}
-        <div style={row}>
-          <label style={labelStyle}>Pilih Lantai</label>
-          <select
-            name="floor_id"
-            value={form.floor_id}
-            onChange={handleChange}
-            required
-            disabled={!form.tower_id}
-            style={inputStyle}
-          >
-            <option value="">
-              {form.tower_id ? '-- Pilih Lantai --' : 'Pilih Tower terlebih dahulu'}
-            </option>
-            {filteredFloors.map((floor) => (
-              <option key={floor.floor_id} value={floor.floor_id}>
-                {floor.floor_number}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_id">Pilih Tower</label>
+                <select
+                  id="tower_id"
+                  name="tower_id"
+                  value={form.tower_id}
+                  onChange={handleChange}
+                  required
+                  disabled={!form.flat_id}
+                  className="form-control"
+                >
+                  <option value="">
+                    {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun terlebih dahulu'}
+                  </option>
+                  {filteredTowers.map((tower) => (
+                    <option key={tower.tower_id} value={tower.tower_id}>
+                      {tower.tower_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <div style={{ marginTop: 16 }}>
-          <button type="submit" style={btnSimpan}>
-            Simpan
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/unit')}
-            style={{ ...btnSimpan, background: '#777', marginLeft: 8 }}
-          >
-            Batal
-          </button>
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
+                <select
+                  id="floor_id"
+                  name="floor_id"
+                  value={form.floor_id}
+                  onChange={handleChange}
+                  required
+                  disabled={!form.tower_id}
+                  className="form-control"
+                >
+                  <option value="">
+                    {form.tower_id ? '-- Pilih Lantai --' : 'Pilih Tower terlebih dahulu'}
+                  </option>
+                  {filteredFloors.map((floor) => (
+                    <option key={floor.floor_id} value={floor.floor_id}>
+                      {floor.floor_number}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
-
-// --- Gaya sederhana ---
-const container = { padding: 20, maxWidth: 450 };
-const formStyle = { display: 'flex', flexDirection: 'column', gap: 12 };
-const row = { display: 'flex', flexDirection: 'column' };
-const labelStyle = { fontWeight: 'bold', marginBottom: 4 };
-const inputStyle = { padding: 8, border: '1px solid #ccc', borderRadius: 4 };
-const btnSimpan = {
-  background: '#007bff',
-  color: 'white',
-  border: 'none',
-  padding: '8px 16px',
-  borderRadius: 4,
-  cursor: 'pointer',
-};
+// Remove old inline style objects; using global utility classes

@@ -57,107 +57,88 @@ export default function FloorForm() {
   };
 
   return (
-    <div style={container}>
-      <h2>Tambah Lantai</h2>
-      <form onSubmit={handleSubmit} id="floorForm" style={formStyle}>
-        {/* ID Floor */}
-        <div style={row}>
-          <label htmlFor="floor_id" style={labelStyle}>ID Lantai</label>
-          <input
-            id="floor_id"
-            name="floor_id"
-            value={form.floor_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Tambah Lantai</h1>
+          <div className="actions">
+            <button className="btn" type="button" onClick={() => navigate('/floor')}>Batal</button>
+            <button className="btn btn-primary" type="submit" form="floorForm">Simpan</button>
+          </div>
         </div>
 
-        {/* Nomor Floor */}
-        <div style={row}>
-          <label htmlFor="floor_number" style={labelStyle}>Nomor Lantai</label>
-          <input
-            id="floor_number"
-            name="floor_number"
-            value={form.floor_number}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          />
-        </div>
+        <div className="card">
+          <div className="card-body">
+            <form onSubmit={handleSubmit} id="floorForm" className="form">
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_id">ID Lantai</label>
+                <input
+                  id="floor_id"
+                  name="floor_id"
+                  value={form.floor_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        {/* Pilih Rusun */}
-        <div style={row}>
-          <label htmlFor="flat_id" style={labelStyle}>Pilih Rusun</label>
-          <select
-            id="flat_id"
-            name="flat_id"
-            value={form.flat_id}
-            onChange={handleChange}
-            required
-            style={inputStyle}
-          >
-            <option value="">-- Pilih Rusun --</option>
-            {flats.map((f) => (
-              <option key={f.flat_id} value={f.flat_id}>
-                {f.flat_name}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="form-row">
+                <label className="form-label" htmlFor="floor_number">Nomor Lantai</label>
+                <input
+                  id="floor_number"
+                  name="floor_number"
+                  value={form.floor_number}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        {/* Pilih Tower */}
-        <div style={row}>
-          <label htmlFor="tower_id" style={labelStyle}>Pilih Tower</label>
-          <select
-            id="tower_id"
-            name="tower_id"
-            value={form.tower_id}
-            onChange={handleChange}
-            required
-            disabled={!form.flat_id}
-            style={inputStyle}
-          >
-            <option value="">
-              {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun Terlebih Dahulu'}
-            </option>
-            {filteredTowers.map((t) => (
-              <option key={t.tower_id} value={t.tower_id}>
-                {t.tower_name} ({t.tower_id})
-              </option>
-            ))}
-          </select>
-        </div>
-      </form>
+              <div className="form-row">
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
+                <select
+                  id="flat_id"
+                  name="flat_id"
+                  value={form.flat_id}
+                  onChange={handleChange}
+                  required
+                  className="form-control"
+                >
+                  <option value="">-- Pilih Rusun --</option>
+                  {flats.map((f) => (
+                    <option key={f.flat_id} value={f.flat_id}>
+                      {f.flat_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-      {/* Tombol Simpan & Batal */}
-      <div style={{ marginTop: 16 }}>
-        <button type="submit" form="floorForm" style={btnSimpan}>
-          Simpan
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/floor')}
-          style={{ ...btnSimpan, background: '#888', marginLeft: 10 }}
-        >
-          Batal
-        </button>
+              <div className="form-row">
+                <label className="form-label" htmlFor="tower_id">Pilih Tower</label>
+                <select
+                  id="tower_id"
+                  name="tower_id"
+                  value={form.tower_id}
+                  onChange={handleChange}
+                  required
+                  disabled={!form.flat_id}
+                  className="form-control"
+                >
+                  <option value="">
+                    {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun Terlebih Dahulu'}
+                  </option>
+                  {filteredTowers.map((t) => (
+                    <option key={t.tower_id} value={t.tower_id}>
+                      {t.tower_name} ({t.tower_id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-// --- Gaya inline ---
-const container = { padding: 20, maxWidth: 500 };
-const formStyle = { display: 'flex', flexDirection: 'column', gap: 12 };
-const row = { display: 'flex', flexDirection: 'column' };
-const labelStyle = { fontWeight: 'bold', marginBottom: 4 };
-const inputStyle = { padding: 8, border: '1px solid #ccc', borderRadius: 4 };
-const btnSimpan = {
-  background: '#007bff',
-  color: 'white',
-  border: 'none',
-  padding: '8px 16px',
-  borderRadius: 4,
-  cursor: 'pointer',
-};
+// Remove old inline style objects; using global utility classes

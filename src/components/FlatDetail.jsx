@@ -1,9 +1,10 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getFlatById, getTowerByFlat, deleteTower } from '../api';
 
 export default function FlatDetail() {
   const { flat_id } = useParams();
+  const navigate = useNavigate();
   const [flat, setFlat] = useState(null);
   const [tower, setTower] = useState([]);
   const [error, setError] = useState(null);
@@ -26,8 +27,8 @@ export default function FlatDetail() {
     fetchData();
   }, [flat_id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return <div className="muted">Loading...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
   const handleDelete = async (tower_id) => {
   if (!window.confirm('Yakin ingin menghapus tower ini?')) return;
@@ -42,55 +43,57 @@ export default function FlatDetail() {
 
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Detail Flat</h2>
-      <div style={{ marginBottom: 20 }}>
-        <p><b>ID:</b> {flat.flat_id}</p>
-        <p><b>Nama:</b> {flat.flat_name}</p>
-        <p><b>Alamat:</b> {flat.flat_address || '-'}</p>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Detail Rumah Susun</h1>
+          <div className="actions">
+            <button className="btn" onClick={() => navigate('/flat')}>Kembali</button>
+            <button className="btn btn-primary" onClick={() => navigate(`/flat/edit/${flat.flat_id}`)}>Edit</button>
+          </div>
+        </div>
+
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: 8 }}>
+              <div className="muted">ID</div>
+              <div>{flat.flat_id}</div>
+              <div className="muted">Nama</div>
+              <div>{flat.flat_name}</div>
+              <div className="muted">Alamat</div>
+              <div>{flat.flat_address || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="section-title">Daftar Tower</div>
+        <div className="card">
+          <div className="card-body">
+            {tower.length > 0 ? (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Tower</th>
+                    <th>Nama Tower</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tower.map((t) => (
+                    <tr key={t.tower_id}>
+                      <td>{t.tower_id}</td>
+                      <td>
+                        <Link className="link-plain" to={`/tower/${t.tower_id}`}>{t.tower_name}</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="muted">Tidak ada tower untuk flat ini.</div>
+            )}
+          </div>
+        </div>
       </div>
-
-      <h3>Daftar Tower</h3>
-
-      {tower.length > 0 ? (
-        <table
-          style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            marginTop: 10,
-            border: '1px solid #ccc',
-          }}
-        >
-          <thead style={{ backgroundColor: '#f5f5f5' }}>
-            <tr>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>ID Tower</th>
-              <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nama Tower</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tower.map((tower) => (
-              <tr key={tower.tower_id}>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>{tower.tower_id}</td>
-                <td style={{ border: '1px solid #ccc', padding: '8px' }}>
-                  <Link
-                    to={`/tower/${tower.tower_id}`}
-                    style={{
-                      color: '#007bff',
-                      textDecoration: 'none',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    {tower.tower_name}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-
-        </table>
-      ) : (
-        <p style={{ marginTop: 10 }}>Tidak ada tower untuk flat ini.</p>
-      )}
     </div>
   );
 }

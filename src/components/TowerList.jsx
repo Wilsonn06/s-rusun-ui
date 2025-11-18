@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTowerByFlat, getAllTower, deleteTower } from '../api';
-import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 export default function TowerList() {
   const { flat_id } = useParams();
@@ -40,87 +39,60 @@ export default function TowerList() {
   };
   
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: 20 }}>
-        <h2>{flat_id ? `Tower pada Flat ${flat_id}` : 'Daftar Semua Tower'}</h2>
-
-        {flat_id && (
-          <button onClick={() => navigate(`/`)} style={{ marginBottom: 10 }}>
-            Kembali ke Flat
-          </button>
-        )}
-
-        <button
-          onClick={() =>
-            flat_id
-              ? navigate(`/flat/${flat_id}/tower/add`)
-              : navigate(`/tower/add`)
-          }
-          style={{ marginLeft: 10 }}
-        >
-          Tambah Tower
-        </button>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">{flat_id ? `Tower pada Flat ${flat_id}` : 'Daftar Tower'}</h1>
+          <div className="actions">
+            {flat_id && (
+              <button className="btn" onClick={() => navigate('/flat')}>Kembali ke Flat</button>
+            )}
+            <button className="btn btn-primary" onClick={() => navigate('/tower/add')}>
+              + Tower
+            </button>
+          </div>
+        </div>
 
         {loading ? (
-          <p>Loading...</p>
+          <div className="muted">Loading...</div>
         ) : (
-          <table
-            border="1"
-            cellPadding="8"
-            style={{
-              marginTop: 15,
-              width: '100%',
-              borderCollapse: 'collapse',
-            }}
-          >
-            <thead style={{ background: '#f2f2f2' }}>
-              <tr>
-                <th>ID Tower</th>
-                <th>Nama Tower</th>
-                <th>ID Flat</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tower.length === 0 ? (
-                <tr>
-                  <td colSpan="4">Belum ada tower.</td>
-                </tr>
-              ) : (
-                tower.map((t) => (
-                  <tr
-                    key={t.tower_id}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleDetail(t.tower_id)}
-                  >
-                    <td>{t.tower_id}</td>
-                    <td style={{ color: '#007bff', textDecoration: 'underline' }}>
-                      {t.tower_name}
-                    </td>
-                    <td>{t.flat_id}</td>
-                    <td
-                      onClick={(e) => e.stopPropagation()} // supaya klik tombol tidak ikut buka detail
-                    >
-                     <button
-  onClick={() =>
-    navigate(`/tower/edit/${t.tower_id}`)
-  }
->
-  Edit
-</button>
-                      <button
-                        onClick={() => handleDelete(t.tower_id)}
-                        style={{ marginLeft: 8 }}
-                      >
-                        Hapus
-                      </button>
-                    </td>
+          <div className="card">
+            <div className="card-body">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Tower</th>
+                    <th>Nama Tower</th>
+                    <th>Rusun</th>
+                    <th style={{ width: 180 }}>Aksi</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {tower.length === 0 ? (
+                    <tr>
+                      <td colSpan="4" className="muted">Belum ada tower.</td>
+                    </tr>
+                  ) : (
+                    tower.map((t) => (
+                      <tr key={t.tower_id}>
+                        <td>{t.tower_id}</td>
+                        <td>
+                          <Link className="link-plain" to={`/tower/${t.tower_id}`}>{t.tower_name}</Link>
+                        </td>
+                        <td>{t.flat_name || '-'}</td>
+                        <td>
+                          <div className="actions">
+                            <button className="btn btn-sm" onClick={() => navigate(`/tower/edit/${t.tower_id}`)}>Edit</button>
+                            <button className="btn btn-sm btn-danger" onClick={() => handleDelete(t.tower_id)}>Hapus</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
     </div>

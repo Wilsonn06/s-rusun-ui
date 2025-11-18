@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getFloorDetail, getUnitsByFloor } from '../api';
 
@@ -29,47 +29,66 @@ export default function FloorDetail() {
     navigate(`/unit/${unit_id}`);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (!floor) return <p>Floor tidak ditemukan.</p>;
+  if (loading) return <div className="muted">Loading...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (!floor) return <div className="muted">Floor tidak ditemukan.</div>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Detail Lantai</h2>
-      <p><b>ID:</b> {floor.floor_id}</p>
-      <p><b>Nomor:</b> {floor.floor_number}</p>
-      <p><b>Tower:</b> {floor.tower_name}</p>
-      <p><b>Rusun:</b> {floor.flat_name}</p>
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Detail Lantai</h1>
+          <div className="actions">
+            <button className="btn" onClick={() => navigate('/floor')}>Kembali</button>
+            <button className="btn btn-primary" onClick={() => navigate(`/floor/edit/${floor.floor_id}`)}>Edit</button>
+          </div>
+        </div>
 
-      <hr />
-      <h3>Daftar Unit</h3>
-      {floor.units?.length ? (
-        <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nomor Unit</th>
-              <th>Pemilik ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {floor.units.map(u => (
-              <tr key={u.unit_id}>
-                <td>{u.unit_id}</td>
-                <td
-                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
-                  onClick={() => handleUnitClick(u.unit_id)}
-                >
-                  {u.unit_number}
-                </td>
-                <td>{u.pemilik_id || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Belum ada unit di lantai ini.</p>
-      )}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: 8 }}>
+              <div className="muted">ID</div>
+              <div>{floor.floor_id}</div>
+              <div className="muted">Nomor Lantai</div>
+              <div>{floor.floor_number}</div>
+              <div className="muted">Tower</div>
+              <div>{floor.tower_name}</div>
+              <div className="muted">Rusun</div>
+              <div>{floor.flat_name}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="section-title">Daftar Unit</div>
+        <div className="card">
+          <div className="card-body">
+            {floor.units?.length ? (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID Unit</th>
+                    <th>Nomor Unit</th>
+                    <th>Pemilik ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {floor.units.map((u) => (
+                    <tr key={u.unit_id}>
+                      <td>{u.unit_id}</td>
+                      <td>
+                        <Link className="link-plain" to={`/unit/${u.unit_id}`}>{u.unit_number}</Link>
+                      </td>
+                      <td>{u.pemilik_id || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="muted">Belum ada unit di lantai ini.</div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

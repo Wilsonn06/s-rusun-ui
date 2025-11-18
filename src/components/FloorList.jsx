@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAllFloors, getFloorsByTower, deleteFloor } from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function FloorList({ tower_id }) {
   const [floors, setFloors] = useState([]);
@@ -31,75 +31,71 @@ export default function FloorList({ tower_id }) {
     }
   };
 
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
-  return (
-    <div style={{ padding: 10 }}>
-      {/* Tombol tambah hanya muncul di halaman /floor (tanpa tower_id) */}
-      {!tower_id && (
-        <button
-          onClick={() => navigate('/floor/add')}
-          style={{ marginBottom: 10 }}
-        >
-          Tambah Lantai
-        </button>
-      )}
-
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ borderCollapse: 'collapse', width: '100%' }}
-      >
-        <thead>
+  // Tabel isi yang dipakai di embed maupun standalone
+  const table = (
+    <table className="table">
+      <thead>
+        <tr>
+          <th>ID Lantai</th>
+          <th>Nomor Lantai</th>
+          <th>Tower</th>
+          <th>Rusun</th>
+          {!tower_id && <th style={{ width: 160 }}>Aksi</th>}
+        </tr>
+      </thead>
+      <tbody>
+        {floors.length === 0 ? (
           <tr>
-            <th>ID</th>
-            <th>Nomor</th>
-            <th>Tower</th>
-            <th>Rusun</th>
-            {!tower_id && <th>Aksi</th>} {/* hanya tampil jika BUKAN di tower detail */}
+            <td colSpan={tower_id ? 4 : 5} className="muted">Belum ada lantai.</td>
           </tr>
-        </thead>
-        <tbody>
-          {floors.length === 0 ? (
-            <tr>
-              <td colSpan={tower_id ? 4 : 5}>Belum ada lantai.</td>
-            </tr>
-          ) : (
-            floors.map((f) => (
-              <tr key={f.floor_id}>
-                <td>{f.floor_id}</td>
-                <td
-                  onClick={() => navigate(`/floor/${f.floor_id}`)}
-                  style={{
-                    color: 'blue',
-                    textDecoration: 'underline',
-                    cursor: 'pointer',
-                  }}
-                  title="Klik untuk lihat detail"
-                >
-                  {f.floor_number}
+        ) : (
+          floors.map((f) => (
+            <tr key={f.floor_id}>
+              <td>{f.floor_id}</td>
+              <td>
+                <Link className="link-plain" to={`/floor/${f.floor_id}`}>{f.floor_number}</Link>
+              </td>
+              <td>{f.tower_name}</td>
+              <td>{f.flat_name}</td>
+              {!tower_id && (
+                <td>
+                  <div className="actions">
+                    <button className="btn btn-sm" onClick={() => navigate(`/floor/edit/${f.floor_id}`)}>Edit</button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(f.floor_id)}>Hapus</button>
+                  </div>
                 </td>
-                <td>{f.tower_name}</td>
-                <td>{f.flat_name}</td>
+              )}
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  );
 
-                {!tower_id && (
-                  <td>
-                    <button onClick={() => navigate(`/floor/edit/${f.floor_id}`)}>
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(f.floor_id)}
-                      style={{ marginLeft: 8 }}
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                )}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+  // Embed mode (misalnya di TowerDetail): hanya kembali tabel tanpa header/card
+  if (tower_id) {
+    return table;
+  }
+
+  // Standalone mode (/floor): tampilkan header + card
+  return (
+    <div className="page">
+      <div className="container">
+        <div className="page-header">
+          <h1 className="page-title">Daftar Lantai</h1>
+          <div className="actions">
+            <button className="btn btn-primary" onClick={() => navigate('/floor/add')}>+ Lantai</button>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-body">
+            {table}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
