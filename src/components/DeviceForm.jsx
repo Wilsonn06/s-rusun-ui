@@ -19,8 +19,11 @@ export default function DeviceForm() {
   const [deviceType, setDeviceType] = useState("");
 
   // Load flats
-  useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/flat`)
+    useEffect(() => {
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/flat`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
@@ -33,7 +36,10 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`${GATEWAY_BASE}/adm/tower`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/tower`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
@@ -46,7 +52,10 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`${GATEWAY_BASE}/adm/floor`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/floor`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -59,7 +68,10 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`${GATEWAY_BASE}/adm/unit`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/unit`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
@@ -77,9 +89,13 @@ export default function DeviceForm() {
     }
 
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${GATEWAY_BASE}/adm/devices`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           device_name: deviceName,
           device_type: deviceType,

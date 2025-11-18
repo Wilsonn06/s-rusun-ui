@@ -17,7 +17,10 @@ export default function PemilikEdit() {
   useEffect(() => {
     const fetchPemilik = async () => {
       try {
-        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (!res.ok) {
           throw new Error('Respon tidak OK');
         }
@@ -42,9 +45,13 @@ export default function PemilikEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error('Update gagal');

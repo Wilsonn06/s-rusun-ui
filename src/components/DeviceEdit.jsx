@@ -11,7 +11,10 @@ export default function DeviceEdit() {
   const [type, setType] = useState("");
 
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then((res) => res.json())
       .then((data) => {
         setDevice(data);
@@ -23,10 +26,14 @@ export default function DeviceEdit() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
+        try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${GATEWAY_BASE}/adm/devices/${device_id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           device_name: name,
           device_type: type,

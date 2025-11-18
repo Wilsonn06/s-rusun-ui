@@ -9,7 +9,10 @@ export default function DeviceDetail() {
   const [device, setDevice] = useState(null);
 
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
       .then((res) => res.json())
       .then((data) => setDevice(data))
       .catch(() => alert("Gagal memuat device"));

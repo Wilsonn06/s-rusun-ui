@@ -8,8 +8,11 @@ export default function FloorListApp() {
 
   useEffect(() => {
     const fetchFloors = async () => {
-      try {
-        const res = await fetch(`${GATEWAY_BASE}/app/floor`);
+          try {
+         const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/app/floor`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil floor");

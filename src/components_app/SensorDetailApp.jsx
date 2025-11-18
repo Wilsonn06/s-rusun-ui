@@ -11,7 +11,10 @@ export default function SensorDetailApp() {
   useEffect(() => {
     async function fetchSensors() {
       try {
-        const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}/sensors`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}/sensors`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const result = await res.json();
 
         if (!res.ok) {

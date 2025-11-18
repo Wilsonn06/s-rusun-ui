@@ -8,8 +8,11 @@ export default function FlatListApp() {
 
   useEffect(() => {
     const fetchFlats = async () => {
-      try {
-        const res = await fetch(`${GATEWAY_BASE}/app/flat`);
+          try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/app/flat`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const data = await res.json();
 
         if (!res.ok) {

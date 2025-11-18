@@ -9,7 +9,10 @@ export default function TowerListApp() {
   useEffect(() => {
     const fetchTowers = async () => {
       try {
-        const res = await fetch(`${GATEWAY_BASE}/app/tower`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/app/tower`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil tower");

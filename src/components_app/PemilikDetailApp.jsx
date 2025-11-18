@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { GATEWAY_BASE } from "../api";
 
 export default function PemilikDetailApp() {
-  const pemilik_id = "PM001"; // Hardcode untuk user yang sedang login
+  // gunakan data user dari localStorage, bukan hardcode
+  const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const pemilik_id = storedUser.pemilik_id;
 
   const [pemilik, setPemilik] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,10 @@ export default function PemilikDetailApp() {
   useEffect(() => {
     async function fetchPemilik() {
       try {
-        const res = await fetch(`${GATEWAY_BASE}/app/pemilik/${pemilik_id}`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/app/pemilik/${pemilik_id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         const data = await res.json();
 
         if (!res.ok) {
@@ -27,8 +32,13 @@ export default function PemilikDetailApp() {
       }
     }
 
-    fetchPemilik();
-  }, []);
+    if (pemilik_id) {
+      fetchPemilik();
+    } else {
+      setError("Pemilik tidak diketahui dari token.");
+      setLoading(false);
+    }
+  }, [pemilik_id]);
 
   if (loading) return <div className="muted">Memuat data...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -47,7 +57,7 @@ export default function PemilikDetailApp() {
               <div><strong>NIK:</strong> {pemilik.nik}</div>
               <div><strong>Tanggal Lahir:</strong> {pemilik.tanggal_lahir}</div>
               <div><strong>Jenis Kelamin:</strong> {pemilik.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
-              <div><strong>No HP:</strong> {pemilik.no_hp}</div>
+              <div><strong>No HP:</strong> {pemilik.no_telepon}</div>
               <div style={{ gridColumn: '1 / -1' }}><strong>Alamat:</strong> {pemilik.alamat}</div>
             </div>
           </div>

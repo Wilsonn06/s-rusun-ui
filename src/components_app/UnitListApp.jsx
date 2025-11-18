@@ -9,7 +9,10 @@ export default function UnitListApp() {
   const fetchUnits = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${GATEWAY_BASE}/app/unit`);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${GATEWAY_BASE}/app/unit`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const data = await res.json();
 
       if (!res.ok) {

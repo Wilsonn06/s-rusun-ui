@@ -7,7 +7,11 @@ export default function DeviceList() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/devices`)
+    const token = localStorage.getItem('token');
+    fetch(`${GATEWAY_BASE}/adm/devices`, {
+      headers: token ? {
+        Authorization: `Bearer ${token}` } : {},
+    })
       .then(res => res.json())
       .then(data => setList(data.devices || []))
       .catch(() => alert("Gagal memuat device"));
@@ -19,8 +23,10 @@ export default function DeviceList() {
     if (!confirmDelete) return;
 
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${GATEWAY_BASE}/adm/devices/${id}`, {
         method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       const data = await res.json();

@@ -13,7 +13,10 @@ export default function PemilikDetail() {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (!res.ok) throw new Error('Gagal memuat detail pemilik');
         const data = await res.json();
         setPemilik(data);

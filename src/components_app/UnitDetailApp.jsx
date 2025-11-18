@@ -13,28 +13,35 @@ export default function UnitDetailApp() {
   const [error, setError] = useState("");
 
   const fetchUnitDetail = async () => {
-    try {
-      const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}`);
-      const data = await res.json();
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.message || "Gagal memuat detail unit");
-        setLoadingUnit(false);
-        return;
-      }
-
-      setUnit(data);
+    if (!res.ok) {
+      setError(data.message || "Gagal memuat detail unit");
       setLoadingUnit(false);
-    } catch (err) {
-      console.error(err);
-      setError("Terjadi kesalahan saat memuat detail unit");
-      setLoadingUnit(false);
+      return;
     }
-  };
+
+    // SIMPAN hanya objek detail-nya
+    setUnit(data.data || data);
+    setLoadingUnit(false);
+  } catch (err) {
+    console.error(err);
+    setError("Terjadi kesalahan saat memuat detail unit");
+    setLoadingUnit(false);
+  }
+};
 
   const fetchSensors = async () => {
     try {
-      const res = await fetch(`${GATEWAY_BASE}/app/devices/unit/${unit_id}`);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${GATEWAY_BASE}/app/devices/unit/${unit_id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -77,13 +84,13 @@ export default function UnitDetailApp() {
         <div className="card">
           <div className="card-body">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div><strong>Unit ID:</strong> {unit.unit_id}</div>
-              <div><strong>Nomor Unit:</strong> {unit.unit_number}</div>
-              <div><strong>Nama Pemilik:</strong> {unit.pemilik_nama || '-'}</div>
-              <div><strong>Pemilik ID:</strong> {unit.pemilik_id}</div>
-              <div><strong>Tower:</strong> {unit.tower_name || '-'}</div>
-              <div><strong>Lantai:</strong> {unit.floor_number || '-'}</div>
-              <div><strong>Rusun:</strong> {unit.flat_name || '-'}</div>
+              <div><strong>Unit ID:</strong> {unit.unitId}</div>
+             <div><strong>Nomor Unit:</strong> {unit.unitNumber}</div>
+             <div><strong>Nama Pemilik:</strong> {unit.pemilikNama || '-'}</div>
+             <div><strong>Pemilik ID:</strong> {unit.pemilikId}</div>
+             <div><strong>Tower:</strong> {unit.towerName || '-'}</div>
+             <div><strong>Lantai:</strong> {unit.floorNumber || '-'}</div>
+             <div><strong>Rusun:</strong> {unit.flatName || '-'}</div>
             </div>
           </div>
         </div>

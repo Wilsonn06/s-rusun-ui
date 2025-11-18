@@ -9,8 +9,11 @@ export default function PemilikList() {
   const navigate = useNavigate();
 
   const fetchPemilik = async () => {
+  const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik`);
+      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (!res.ok) {
         setError('Gagal memuat data pemilik');
         return;
@@ -30,9 +33,11 @@ export default function PemilikList() {
 
   const handleDelete = async (pemilik_id) => {
     if (!window.confirm('Yakin ingin menghapus pemilik ini?')) return;
-    try {
-      await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
-        method: 'DELETE',
+        try {
+          const token = localStorage.getItem('token');
+          await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
+          method: 'DELETE',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       fetchPemilik();
     } catch {

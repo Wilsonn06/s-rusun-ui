@@ -1,7 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const menus = [
     { path: '/flat', label: 'Rumah Susun' },
@@ -13,6 +14,14 @@ export default function Sidebar() {
   ];
 
   const isActive = (path) => location.pathname.startsWith(path);
+
+  const handleLogout = () => {
+    // hapus token & user di localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // arahkan ke halaman login
+    navigate('/login', { replace: true });
+  };
 
   return (
     <aside className="sidebar" role="navigation" aria-label="Sidebar Navigation">
@@ -28,6 +37,24 @@ export default function Sidebar() {
             </Link>
           </li>
         ))}
+
+        {/* Tombol Logout */}
+        <li className="nav-item">
+          <button
+            type="button"
+            className="nav-link"
+            style={{
+              border: 'none',
+              background: 'none',
+              padding: 0,
+              cursor: 'pointer',
+              textAlign: 'left',
+            }}
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </li>
       </ul>
     </aside>
   );
