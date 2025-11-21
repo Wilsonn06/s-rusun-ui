@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { GATEWAY_BASE, getUnitsByPemilik } from '../api';
+import { getUnitsByPemilik } from '../api';
 
 export default function PemilikDetail() {
   const { pemilik_id } = useParams();
@@ -13,10 +13,7 @@ export default function PemilikDetail() {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+        const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`);
         if (!res.ok) throw new Error('Gagal memuat detail pemilik');
         const data = await res.json();
         setPemilik(data);
