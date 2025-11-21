@@ -43,7 +43,7 @@ import Sidebar from './components/Sidebar';
 // =======================================================
 function Layout() {
   const location = useLocation();
-  const isApp = location.pathname.startsWith('/app');
+  const isApp = location.pathname.startsWith('/app-ui');
 
   return (
     <div style={{ display: 'flex' }}>
