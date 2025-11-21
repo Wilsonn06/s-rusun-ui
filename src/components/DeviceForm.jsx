@@ -19,7 +19,7 @@ export default function DeviceForm() {
 
   // Load flats
   useEffect(() => {
-    fetch(`http://s-rusun-adm:3001/flat`)
+    fetch(`http://localhost/adm/flat`)
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
