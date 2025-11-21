@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { GATEWAY_BASE } from "../api";
 
 export default function FloorListApp() {
   const [floors, setFloors] = useState([]);
@@ -8,11 +7,8 @@ export default function FloorListApp() {
 
   useEffect(() => {
     const fetchFloors = async () => {
-          try {
-         const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/app/floor`, {
-          headers: {},
-        });
+      try {
+        const res = await fetch(`http://localhost:3002/floor`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil floor");
