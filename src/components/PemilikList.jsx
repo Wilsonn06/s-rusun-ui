@@ -9,7 +9,7 @@ export default function PemilikList() {
 
   const fetchPemilik = async () => {
     try {
-      const res = await fetch(`http://s-rusun-adm:3001/pemilik`);
+      const res = await fetch(`http://localhost/adm/pemilik`);
       if (!res.ok) {
         setError('Gagal memuat data pemilik');
         return;
@@ -30,7 +30,7 @@ export default function PemilikList() {
   const handleDelete = async (pemilik_id) => {
     if (!window.confirm('Yakin ingin menghapus pemilik ini?')) return;
     try {
-      await fetch(`http://s-rusun-adm:3001/pemilik/${pemilik_id}`, {
+      await fetch(`http://localhost/adm/pemilik/${pemilik_id}`, {
         method: 'DELETE',
       });
       fetchPemilik();
