@@ -19,7 +19,7 @@ export default function DeviceForm() {
 
   // Load flats
   useEffect(() => {
-    fetch(`http://localhost:3001/flat`)
+    fetch(`http://s-rusun-adm:3001/flat`)
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
@@ -32,7 +32,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`http://localhost:3001/tower`)
+    fetch(`http://s-rusun-adm:3001/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
@@ -45,7 +45,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`http://localhost:3001/floor`)
+    fetch(`http://s-rusun-adm:3001/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -58,7 +58,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`http://localhost:3001/unit`)
+    fetch(`http://s-rusun-adm:3001/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
@@ -76,7 +76,7 @@ export default function DeviceForm() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/devices`, {
+      const res = await fetch(`http://s-rusun-adm:3001/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
