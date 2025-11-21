@@ -32,7 +32,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`http://s-rusun-adm:3001/tower`)
+    fetch(`http://localhost/adm/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
