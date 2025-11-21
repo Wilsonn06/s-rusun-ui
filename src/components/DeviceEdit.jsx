@@ -10,7 +10,7 @@ export default function DeviceEdit() {
   const [type, setType] = useState("");
 
   useEffect(() => {
-    fetch(`http://s-rusun-adm:3001/devices/detail/${device_id}`)
+    fetch(`http://localhost/adm/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => {
         setDevice(data);
