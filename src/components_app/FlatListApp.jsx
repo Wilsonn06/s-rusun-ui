@@ -11,7 +11,7 @@ export default function FlatListApp() {
           try {
         const token = localStorage.getItem('token');
         const res = await fetch(`${GATEWAY_BASE}/app/flat`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: {},
         });
         const data = await res.json();
 
