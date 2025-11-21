@@ -8,7 +8,7 @@ export default function DeviceDetail() {
   const [device, setDevice] = useState(null);
 
   useEffect(() => {
-    fetch(`http://s-rusun-adm:3001/devices/detail/${device_id}`)
+    fetch(`http://localhost/adm/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => setDevice(data))
       .catch(() => alert("Gagal memuat device"));
