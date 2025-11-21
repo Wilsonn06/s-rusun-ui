@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GATEWAY_BASE } from "../api";
 
 export default function DeviceForm() {
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ export default function DeviceForm() {
 
   // Load flats
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/flat`)
+    fetch(`http://localhost:3001/flat`)
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
@@ -33,7 +32,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`${GATEWAY_BASE}/adm/tower`)
+    fetch(`http://localhost:3001/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
@@ -46,7 +45,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`${GATEWAY_BASE}/adm/floor`)
+    fetch(`http://localhost:3001/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -59,7 +58,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`${GATEWAY_BASE}/adm/unit`)
+    fetch(`http://localhost:3001/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
@@ -77,7 +76,7 @@ export default function DeviceForm() {
     }
 
     try {
-      const res = await fetch(`${GATEWAY_BASE}/adm/devices`, {
+      const res = await fetch(`http://localhost:3001/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
