@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function UnitListApp() {
   const [units, setUnits] = useState([]);
@@ -59,9 +60,9 @@ export default function UnitListApp() {
                     <tr key={u.unit_id}>
                       <td>{u.unit_id}</td>
                       <td>
-                        <a className="link-plain" href={`/app-ui/unit/${u.unit_id}`}>
+                        <Link className="link-plain" to={`/app-ui/unit/${u.unit_id}`}>
                           {u.unit_number}
-                        </a>
+                        </Link>
                       </td>
                       <td>{u.floor_number || '-'}</td>
                       <td>{u.tower_name || '-'}</td>
