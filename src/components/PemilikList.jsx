@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GATEWAY_BASE } from '../api';
 
 export default function PemilikList() {
   const [pemilik, setPemilik] = useState([]);
@@ -9,11 +8,8 @@ export default function PemilikList() {
   const navigate = useNavigate();
 
   const fetchPemilik = async () => {
-  const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch(`http://localhost:3001/pemilik`);
       if (!res.ok) {
         setError('Gagal memuat data pemilik');
         return;
@@ -33,11 +29,9 @@ export default function PemilikList() {
 
   const handleDelete = async (pemilik_id) => {
     if (!window.confirm('Yakin ingin menghapus pemilik ini?')) return;
-        try {
-          const token = localStorage.getItem('token');
-          await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
-          method: 'DELETE',
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+    try {
+      await fetch(`http://localhost:3001/pemilik/${pemilik_id}`, {
+        method: 'DELETE',
       });
       fetchPemilik();
     } catch {
