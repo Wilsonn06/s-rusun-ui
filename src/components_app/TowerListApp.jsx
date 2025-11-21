@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { GATEWAY_BASE } from "../api";
 
 export default function TowerListApp() {
   const [towers, setTowers] = useState([]);
@@ -9,10 +8,7 @@ export default function TowerListApp() {
   useEffect(() => {
     const fetchTowers = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/app/tower`, {
-          headers: {},
-        });
+        const res = await fetch(`http://localhost:3002/tower`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil tower");
