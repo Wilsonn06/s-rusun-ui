@@ -8,7 +8,7 @@ export default function TowerListApp() {
   useEffect(() => {
     const fetchTowers = async () => {
       try {
-        const res = await fetch(`http://s-rusun-app:3002/tower`);
+        const res = await fetch(`http://localhost/app/tower`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil tower");
