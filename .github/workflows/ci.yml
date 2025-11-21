@@ -12,28 +12,35 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
-    - name: Login to GitHub Container Registry
+    # Login ke GitHub Container Registry (gunakan GHCR_PAT)
+    - name: Login to GHCR
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GHCR_PAT }}   # <-- pakai PAT, bukan GITHUB_TOKEN
 
+    # Build image dengan nama agen yang benar dan lowercase
     - name: Build Docker image
       run: |
-        IMAGE_NAME=ghcr.io/${{ github.repository }}:latest
+        REPO_OWNER=${{ github.repository_owner }}
+        REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+
+        IMAGE_NAME="ghcr.io/$REPO_OWNER/$REPO_NAME:latest"
         echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
         docker build -t $IMAGE_NAME .
 
     - name: Push Docker image
       run: |
         docker push $IMAGE_NAME
 
+    # Kirim notifikasi ke repo infra
     - name: Notify infra repo to deploy
       uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ secrets.REPO_PAT }}
-        repository: Wilsonn06/s-rusun-infra
+        repository: wilsonn06/s-rusun-infra     # lowercase juga
         event-type: image-update
         client-payload: |
           {
