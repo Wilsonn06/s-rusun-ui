@@ -25,6 +25,7 @@ import DeviceDetail from './components/DeviceDetail';
 import DeviceEdit from './components/DeviceEdit';
 import DeviceForm from './components/DeviceForm';
 
+
 import UnitListApp from "./components_app/UnitListApp";
 import UnitDetailApp from "./components_app/UnitDetailApp";
 import SensorDetailApp from "./components_app/SensorDetailApp";
@@ -37,31 +38,20 @@ import SidebarApp from "./components_app/SidebarApp";
 import Sidebar from './components/SideBar';
 
 
-// NO AUTH MODE — Semua route terbuka
-function RequireAuth({ children }) {
-  return children;
-}
-
-
 // =======================================================
 // WRAPPER AGAR BISA MENGGUNAKAN useLocation()
 // =======================================================
 function Layout() {
   const location = useLocation();
   const isApp = location.pathname.startsWith('/app');
-  const isLoginPage = location.pathname === "/login"; // ditambahkan agar tidak error
 
   return (
     <div style={{ display: 'flex' }}>
-      {!isLoginPage && (isApp ? <SidebarApp /> : <Sidebar />)}
+      {isApp ? <SidebarApp /> : <Sidebar />}
 
-      <div style={{ flex: 1, marginLeft: isLoginPage ? 0 : '220px', padding: '20px' }}>
+      <div style={{ flex: 1, marginLeft: '220px', padding: '20px' }}>
         <Routes>
-
-          {/* Redirect default */}
           <Route path="/" element={<Navigate to="/flat" />} />
-
-          {/* ===================== ADMIN ROUTES ===================== */}
 
           <Route path="/flat" element={<FlatList />} />
           <Route path="/flat/add" element={<FlatForm />} />
@@ -93,10 +83,10 @@ function Layout() {
           <Route path="/devices/:device_id" element={<DeviceDetail />} />
           <Route path="/devices/edit/:device_id" element={<DeviceEdit />} />
 
+
+
           {/* ===================== APP ROUTES ===================== */}
-
           <Route path="/app" element={<Navigate to="/app/unit" />} />
-
           <Route path="/app/unit" element={<UnitListApp />} />
           <Route path="/app/unit/:unit_id" element={<UnitDetailApp />} />
           <Route path="/app/pemilik/:pemilik_id" element={<PemilikDetailApp />} />
@@ -105,7 +95,6 @@ function Layout() {
           <Route path="/app/tower" element={<TowerListApp />} />
           <Route path="/app/floor" element={<FloorListApp />} />
           <Route path="/app/pemilik" element={<PemilikDetailApp />} />
-
         </Routes>
       </div>
     </div>
