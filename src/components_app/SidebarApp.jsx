@@ -4,11 +4,11 @@ export default function SidebarApp() {
   const location = useLocation();
 
   const menus = [
-    { path: '/app/unit', label: 'Unit Saya' },
-    { path: '/app/pemilik', label: 'Profil' },
-    { path: '/app/flat', label: 'Flat' },
-    { path: '/app/tower', label: 'Tower' },
-    { path: '/app/floor', label: 'Floor' },
+    { path: '/app-ui/unit', label: 'Unit Saya' },
+    { path: '/app-ui/pemilik', label: 'Profil' },
+    { path: '/app-ui/flat', label: 'Flat' },
+    { path: '/app-ui/tower', label: 'Tower' },
+    { path: '/app-ui/floor', label: 'Floor' },
     
   ];
 
