@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { GATEWAY_BASE } from '../api';
 
 export default function PemilikEdit() {
   const { pemilik_id } = useParams();
@@ -17,10 +16,7 @@ export default function PemilikEdit() {
   useEffect(() => {
     const fetchPemilik = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+        const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`);
         if (!res.ok) {
           throw new Error('Respon tidak OK');
         }
@@ -45,13 +41,9 @@ export default function PemilikEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik/${pemilik_id}`, {
+      const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error('Update gagal');
