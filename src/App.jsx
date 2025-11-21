@@ -39,14 +39,7 @@ import Login from './components/login';
 
 // Komponen untuk proteksi route: cek token di localStorage
 function RequireAuth({ children }) {
-  const location = useLocation();
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return children;
+  return children; // ALWAYS ALLOW
 }
 
 // =======================================================
