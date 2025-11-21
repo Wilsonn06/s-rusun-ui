@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GATEWAY_BASE } from '../api'; // <-- JANGAN di-comment
 
 export default function DeviceList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    fetch(`${GATEWAY_BASE}/adm/devices`, {
-      headers: token ? {
-        Authorization: `Bearer ${token}` } : {},
-    })
+    fetch(`http://localhost:3001/devices`)
       .then(res => res.json())
       .then(data => setList(data.devices || []))
       .catch(() => alert("Gagal memuat device"));
@@ -23,10 +18,8 @@ export default function DeviceList() {
     if (!confirmDelete) return;
 
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${GATEWAY_BASE}/adm/devices/${id}`, {
+      const res = await fetch(`http://localhost:3001/devices/${id}`, {
         method: "DELETE",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       const data = await res.json();
