@@ -1,8 +1,7 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function SidebarApp() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const menus = [
     { path: '/app/unit', label: 'Unit Saya' },
@@ -10,13 +9,8 @@ export default function SidebarApp() {
     { path: '/app/flat', label: 'Flat' },
     { path: '/app/tower', label: 'Tower' },
     { path: '/app/floor', label: 'Floor' },
+    
   ];
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login', { replace: true });
-  };
 
   return (
     <aside className="sidebar">
@@ -32,22 +26,6 @@ export default function SidebarApp() {
             </Link>
           </li>
         ))}
-        <li>
-          <button
-            type="button"
-            className="nav-link"
-            style={{
-              border: 'none',
-              background: 'none',
-              padding: 0,
-              cursor: 'pointer',
-              textAlign: 'left',
-            }}
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </li>
       </ul>
     </aside>
   );
