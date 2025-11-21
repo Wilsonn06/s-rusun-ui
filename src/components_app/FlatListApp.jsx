@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { GATEWAY_BASE } from "../api";
 
 export default function FlatListApp() {
   const [flats, setFlats] = useState([]);
@@ -8,11 +7,8 @@ export default function FlatListApp() {
 
   useEffect(() => {
     const fetchFlats = async () => {
-          try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/app/flat`, {
-          headers: {},
-        });
+      try {
+        const res = await fetch(`http://localhost:3002/flat`);
         const data = await res.json();
 
         if (!res.ok) {
