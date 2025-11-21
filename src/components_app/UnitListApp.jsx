@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { GATEWAY_BASE } from "../api";
 
 export default function UnitListApp() {
   const [units, setUnits] = useState([]);
@@ -9,10 +8,7 @@ export default function UnitListApp() {
   const fetchUnits = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${GATEWAY_BASE}/app/unit`, {
-        headers: {},
-      });
+      const res = await fetch(`http://localhost:3002/unit`);
       const data = await res.json();
 
       if (!res.ok) {
