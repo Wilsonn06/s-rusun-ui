@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { GATEWAY_BASE } from "../api";
 
 export default function DeviceEdit() {
   const { device_id } = useParams();
@@ -11,7 +10,7 @@ export default function DeviceEdit() {
   const [type, setType] = useState("");
 
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`)
+    fetch(`http://localhost:3001/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => {
         setDevice(data);
@@ -24,7 +23,7 @@ export default function DeviceEdit() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${GATEWAY_BASE}/adm/devices/${device_id}`, {
+      const res = await fetch(`http://localhost:3001/devices/${device_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
