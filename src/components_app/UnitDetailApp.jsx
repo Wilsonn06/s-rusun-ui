@@ -33,7 +33,7 @@ export default function UnitDetailApp() {
 
   const fetchSensors = async () => {
     try {
-      const res = await fetch(`http://s-rusun-app:3002/devices/unit/${unit_id}`);
+      const res = await fetch(`http://localhost/app/devices/unit/${unit_id}`);
       const data = await res.json();
 
       if (!res.ok) {
