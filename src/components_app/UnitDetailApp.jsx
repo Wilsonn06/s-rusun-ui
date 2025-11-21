@@ -16,7 +16,7 @@ export default function UnitDetailApp() {
   try {
     const token = localStorage.getItem('token');
     const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: {},
     });
     const data = await res.json();
 
@@ -40,7 +40,7 @@ export default function UnitDetailApp() {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${GATEWAY_BASE}/app/devices/unit/${unit_id}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: {},
       });
       const data = await res.json();
 
