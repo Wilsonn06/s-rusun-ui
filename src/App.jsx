@@ -86,15 +86,15 @@ function Layout() {
 
 
           {/* ===================== APP ROUTES ===================== */}
-          <Route path="/app" element={<Navigate to="/app/unit" />} />
-          <Route path="/app/unit" element={<UnitListApp />} />
-          <Route path="/app/unit/:unit_id" element={<UnitDetailApp />} />
-          <Route path="/app/pemilik/:pemilik_id" element={<PemilikDetailApp />} />
-          <Route path="/app/sensor/:unit_id" element={<SensorDetailApp />} />
-          <Route path="/app/flat" element={<FlatListApp />} />
-          <Route path="/app/tower" element={<TowerListApp />} />
-          <Route path="/app/floor" element={<FloorListApp />} />
-          <Route path="/app/pemilik" element={<PemilikDetailApp />} />
+          <Route path="/app-ui" element={<Navigate to="/app-ui/unit" />} />
+          <Route path="/app-ui/unit" element={<UnitListApp />} />
+          <Route path="/app-ui/unit/:unit_id" element={<UnitDetailApp />} />
+          <Route path="/app-ui/pemilik/:pemilik_id" element={<PemilikDetailApp />} />
+          <Route path="/app-ui/sensor/:unit_id" element={<SensorDetailApp />} />
+          <Route path="/app-ui/flat" element={<FlatListApp />} />
+          <Route path="/app-ui/tower" element={<TowerListApp />} />
+          <Route path="/app-ui/floor" element={<FloorListApp />} />
+          <Route path="/app-ui/pemilik" element={<PemilikDetailApp />} />
         </Routes>
       </div>
     </div>
