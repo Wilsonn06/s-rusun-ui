@@ -11,7 +11,7 @@ export default function TowerListApp() {
       try {
         const token = localStorage.getItem('token');
         const res = await fetch(`${GATEWAY_BASE}/app/tower`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: {},
         });
         const data = await res.json();
 
