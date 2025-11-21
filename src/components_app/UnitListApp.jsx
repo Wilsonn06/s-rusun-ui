@@ -8,7 +8,7 @@ export default function UnitListApp() {
   const fetchUnits = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:3002/unit`);
+      const res = await fetch(`http://s-rusun-app:3002/unit`);
       const data = await res.json();
 
       if (!res.ok) {
