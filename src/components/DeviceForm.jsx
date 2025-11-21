@@ -45,7 +45,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`http://s-rusun-adm:3001/floor`)
+    fetch(`http://localhost/adm/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -58,7 +58,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`http://s-rusun-adm:3001/unit`)
+    fetch(`http://localhost/adm/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
@@ -76,7 +76,7 @@ export default function DeviceForm() {
     }
 
     try {
-      const res = await fetch(`http://s-rusun-adm:3001/devices`, {
+      const res = await fetch(`http://localhost/adm/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
