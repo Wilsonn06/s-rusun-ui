@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { GATEWAY_BASE } from "../api";
 
 export default function DeviceDetail() {
   const { device_id } = useParams();
@@ -9,7 +8,7 @@ export default function DeviceDetail() {
   const [device, setDevice] = useState(null);
 
   useEffect(() => {
-    fetch(`${GATEWAY_BASE}/adm/devices/detail/${device_id}`)
+    fetch(`http://localhost:3001/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => setDevice(data))
       .catch(() => alert("Gagal memuat device"));
