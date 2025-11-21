@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GATEWAY_BASE } from '../api';
 
 export default function PemilikForm() {
   const [form, setForm] = useState({
@@ -22,13 +21,9 @@ export default function PemilikForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${GATEWAY_BASE}/adm/pemilik`, {
+      const res = await fetch(`http://localhost:3001/pemilik`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
 
