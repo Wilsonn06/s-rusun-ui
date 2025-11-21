@@ -23,7 +23,7 @@ export default function DeviceEdit() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:3001/devices/${device_id}`, {
+      const res = await fetch(`http://localhost/adm/devices/${device_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
