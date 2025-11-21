@@ -67,7 +67,7 @@ export default function UnitDetailApp() {
         <div className="page-header">
           <h1 className="page-title">Detail Unit</h1>
           <div className="actions">
-            <button className="btn" onClick={() => navigate("/app/unit")}>
+            <button className="btn" onClick={() => navigate("/app-ui/unit")}>
               Kembali
             </button>
           </div>
