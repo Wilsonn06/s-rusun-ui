@@ -13,7 +13,7 @@ export default function PemilikDetail() {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/pemilik/${pemilik_id}`);
+        const res = await fetch(`http://s-rusun-adm:3001/pemilik/${pemilik_id}`);
         if (!res.ok) throw new Error('Gagal memuat detail pemilik');
         const data = await res.json();
         setPemilik(data);
