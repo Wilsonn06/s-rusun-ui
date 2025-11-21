@@ -10,14 +10,11 @@ export const apiClient = axios.create({
   baseURL: GATEWAY_BASE,
 });
 
+// NO AUTH MODE
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token'); // nanti diisi saat login / sementara manual lewat DevTools
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+  return config; // tidak menambahkan header apa pun
 });
+
 
 // ================== TOWER API (ADM) ==================
 
