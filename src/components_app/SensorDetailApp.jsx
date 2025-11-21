@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { GATEWAY_BASE } from "../api";
 
 export default function SensorDetailApp() {
   const { unit_id } = useParams();
@@ -11,10 +10,7 @@ export default function SensorDetailApp() {
   useEffect(() => {
     async function fetchSensors() {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${GATEWAY_BASE}/app/unit/${unit_id}/sensors`, {
-          headers: {},
-        });
+        const res = await fetch(`http://localhost:3002/unit/${unit_id}/sensors`);
         const result = await res.json();
 
         if (!res.ok) {
