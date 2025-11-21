@@ -59,7 +59,7 @@ export default function UnitListApp() {
                     <tr key={u.unit_id}>
                       <td>{u.unit_id}</td>
                       <td>
-                        <a className="link-plain" href={`/app/unit/${u.unit_id}`}>
+                        <a className="link-plain" href={`/app-ui/unit/${u.unit_id}`}>
                           {u.unit_number}
                         </a>
                       </td>
