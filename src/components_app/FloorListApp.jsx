@@ -8,7 +8,7 @@ export default function FloorListApp() {
   useEffect(() => {
     const fetchFloors = async () => {
       try {
-        const res = await fetch(`http://s-rusun-app:3002/floor`);
+        const res = await fetch(`http://localhost/app/floor`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil floor");
