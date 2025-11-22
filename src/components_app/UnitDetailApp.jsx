@@ -13,7 +13,7 @@ export default function UnitDetailApp() {
 
   const fetchUnitDetail = async () => {
     try {
-      const res = await fetch(`http://localhost/app/unit/${unit_id}`);
+      const res = await fetch(`http://localhost:8080/app/unit/${unit_id}`);
       const data = await res.json();
 
       if (!res.ok) {
