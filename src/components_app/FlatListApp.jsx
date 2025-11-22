@@ -8,7 +8,7 @@ export default function FlatListApp() {
   useEffect(() => {
     const fetchFlats = async () => {
       try {
-        const res = await fetch(`http://localhost/app/flat`);
+        const res = await fetch(`http://localhost:8080/app/flat`);
         const data = await res.json();
 
         if (!res.ok) {
