@@ -10,7 +10,7 @@ export default function PemilikDetailApp() {
   useEffect(() => {
     async function fetchPemilik() {
       try {
-        const res = await fetch(`http://localhost/app/pemilik/${pemilik_id}`);
+        const res = await fetch(`http://localhost:8080/app/pemilik/${pemilik_id}`);
         const data = await res.json();
 
         if (!res.ok) {
