@@ -6,7 +6,7 @@ export default function DeviceList() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost/adm/devices`)
+    fetch(`http://localhost:8080/adm/devices`)
       .then(res => res.json())
       .then(data => setList(data.devices || []))
       .catch(() => alert("Gagal memuat device"));
@@ -18,7 +18,7 @@ export default function DeviceList() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost/adm/devices/${id}`, {
+      const res = await fetch(`http://localhost:8080/adm/devices/${id}`, {
         method: "DELETE",
       });
 
