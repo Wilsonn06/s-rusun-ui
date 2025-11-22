@@ -19,7 +19,7 @@ export default function DeviceForm() {
 
   // Load flats
   useEffect(() => {
-    fetch(`http://localhost/adm/flat`)
+    fetch(`http://localhost:8080/adm/flat`)
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
@@ -32,7 +32,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`http://localhost/adm/tower`)
+    fetch(`http://localhost:8080/adm/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
@@ -45,7 +45,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`http://localhost/adm/floor`)
+    fetch(`http://localhost:8080/adm/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -58,7 +58,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`http://localhost/adm/unit`)
+    fetch(`http://localhost:8080/adm/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
