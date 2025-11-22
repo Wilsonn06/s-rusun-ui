@@ -21,7 +21,7 @@ export default function PemilikForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost/adm/pemilik`, {
+      const res = await fetch(`http://localhost:8080/adm/pemilik`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
