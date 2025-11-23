@@ -16,7 +16,7 @@ export default function PemilikEdit() {
   useEffect(() => {
     const fetchPemilik = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/adm/pemilik/${pemilik_id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/pemilik/${pemilik_id}`);
         if (!res.ok) {
           throw new Error('Respon tidak OK');
         }
@@ -41,7 +41,7 @@ export default function PemilikEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:8080/adm/pemilik/${pemilik_id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/pemilik/${pemilik_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
