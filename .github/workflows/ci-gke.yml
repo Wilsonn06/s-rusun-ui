@@ -1,0 +1,45 @@
+name: CI - Build & Push image to GCP (UI)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    # Auth ke Google Cloud
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    # Auth Docker ke Artifact Registry
+    - name: Configure Docker for AR
+      run: gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+
+    # Build & Push image
+    - name: Build & Push Image
+      run: |
+        PROJECT_ID="${{ secrets.GCP_PROJECT_ID }}"
+        IMAGE="asia-southeast2-docker.pkg.dev/$PROJECT_ID/rusun-repo/s-rusun-ui:latest"
+        echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+        docker build -t $IMAGE .
+        docker push $IMAGE
+
+    # Notify infra repo untuk GitOps
+    - name: Notify infra repo
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.REPO_PAT }}
+        repository: wilsonn06/s-rusun-infra
+        event-type: image-update-gke
+        client-payload: |
+          {
+            "service": "s-rusun-ui",
+            "image": "${{ env.IMAGE }}"
+          }
