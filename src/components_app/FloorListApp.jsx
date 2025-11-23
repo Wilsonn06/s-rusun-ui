@@ -8,7 +8,7 @@ export default function FloorListApp() {
   useEffect(() => {
     const fetchFloors = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/app/floor`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/floor`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil floor");
