@@ -8,7 +8,7 @@ export default function FlatListApp() {
   useEffect(() => {
     const fetchFlats = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/app/flat`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/flat`);
         const data = await res.json();
 
         if (!res.ok) {
