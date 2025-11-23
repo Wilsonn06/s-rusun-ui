@@ -10,7 +10,7 @@ export default function DeviceEdit() {
   const [type, setType] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/adm/devices/detail/${device_id}`)
+    fetch(`${import.meta.env.VITE_API_BASE}/adm/devices/detail/${device_id}`)
       .then((res) => res.json())
       .then((data) => {
         setDevice(data);
@@ -23,7 +23,7 @@ export default function DeviceEdit() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:8080/adm/devices/${device_id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/devices/${device_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
