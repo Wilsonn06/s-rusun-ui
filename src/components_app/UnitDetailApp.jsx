@@ -13,7 +13,7 @@ export default function UnitDetailApp() {
 
   const fetchUnitDetail = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/app/unit/${unit_id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/unit/${unit_id}`);
       const data = await res.json();
 
       if (!res.ok) {
@@ -33,7 +33,7 @@ export default function UnitDetailApp() {
 
   const fetchSensors = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/app/devices/unit/${unit_id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/devices/unit/${unit_id}`);
       const data = await res.json();
 
       if (!res.ok) {
