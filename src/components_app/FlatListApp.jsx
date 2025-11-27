@@ -28,20 +28,20 @@ export default function FlatListApp() {
     fetchFlats();
   }, []);
 
-  if (loading) return <div className="muted">Loading flat...</div>;
+  if (loading) return <div className="muted">Loading Rusun...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
     <div className="page">
       <div className="container">
         <div className="page-header">
-          <h1 className="page-title">Flat Anda</h1>
+          <h1 className="page-title">Rusun Anda</h1>
         </div>
 
         <div className="card">
           <div className="card-body">
             {flats.length === 0 ? (
-              <div className="muted">Tidak ada flat terdaftar.</div>
+              <div className="muted">Tidak ada rusun terdaftar.</div>
             ) : (
               <table className="table">
                 <thead>
