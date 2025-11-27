@@ -108,7 +108,7 @@ export default function UnitEdit() {
               <div className="form-row">
                 <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
                 <select id="floor_id" name="floor_id" value={form.floor_id} onChange={handleChange} required className="form-control">
-                  <option value="">-- Pilih Floor --</option>
+                  <option value="">-- Pilih Lantai --</option>
                   {floors.map((f) => (
                     <option key={f.floor_id} value={f.floor_id}>{f.floor_number}</option>
                   ))}
