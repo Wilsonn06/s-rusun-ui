@@ -50,7 +50,7 @@ export default function UnitListApp() {
                   <tr>
                     <th>ID Unit</th>
                     <th>Nomor Unit</th>
-                    <th>Lantai</th>
+                    <th>Nomor Lantai</th>
                     <th>Tower</th>
                     <th>Rusun</th>
                   </tr>
