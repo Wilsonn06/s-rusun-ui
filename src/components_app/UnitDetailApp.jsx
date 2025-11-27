@@ -81,7 +81,7 @@ export default function UnitDetailApp() {
               <div><strong>Nama Pemilik:</strong> {unit.pemilik_nama || '-'}</div>
               <div><strong>Pemilik ID:</strong> {unit.pemilik_id}</div>
               <div><strong>Tower:</strong> {unit.tower_name || '-'}</div>
-              <div><strong>Lantai:</strong> {unit.floor_number || '-'}</div>
+              <div><strong>Nomor Lantai:</strong> {unit.floor_number || '-'}</div>
               <div><strong>Rusun:</strong> {unit.flat_name || '-'}</div>
             </div>
           </div>
