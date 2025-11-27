@@ -40,8 +40,8 @@ export default function FloorListApp() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th>ID Floor</th>
-                    <th>Lantai</th>
+                    <th>ID Lantai</th>
+                    <th>Nomor Lantai</th>
                     <th>Tower</th>
                     <th>Rusun</th>
                   </tr>
