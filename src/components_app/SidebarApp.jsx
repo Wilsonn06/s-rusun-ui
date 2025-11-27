@@ -6,9 +6,9 @@ export default function SidebarApp() {
   const menus = [
     { path: '/app-ui/unit', label: 'Unit Saya' },
     { path: '/app-ui/pemilik', label: 'Profil' },
-    { path: '/app-ui/flat', label: 'Flat' },
+    { path: '/app-ui/flat', label: 'Rumah Susun' },
     { path: '/app-ui/tower', label: 'Tower' },
-    { path: '/app-ui/floor', label: 'Floor' },
+    { path: '/app-ui/floor', label: 'Lantai' },
     
   ];
 
