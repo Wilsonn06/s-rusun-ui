@@ -39,7 +39,7 @@ export default function FloorList({ tower_id }) {
       <thead>
         <tr>
           <th>ID Lantai</th>
-          <th>Lantai</th>
+          <th>Nomor Lantai</th>
           <th>Tower</th>
           <th>Rusun</th>
           {!tower_id && <th style={{ width: 160 }}>Aksi</th>}
