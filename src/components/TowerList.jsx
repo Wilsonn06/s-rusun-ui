@@ -62,7 +62,7 @@ export default function TowerList() {
                 <thead>
                   <tr>
                     <th>ID Tower</th>
-                    <th>Nama Tower</th>
+                    <th>Tower</th>
                     <th>Rusun</th>
                     <th style={{ width: 180 }}>Aksi</th>
                   </tr>
