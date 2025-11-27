@@ -52,7 +52,7 @@ export default function FlatList() {
                 <thead>
                   <tr>
                     <th>ID Rusun</th>
-                    <th>Rusun Tes</th>
+                    <th>Rusun TRE</th>
                     <th>Alamat</th>
                     <th style={{ width: 160 }}>Aksi</th>
                   </tr>
