@@ -125,9 +125,9 @@ export default function DeviceForm() {
           <div className="card-body">
             <form onSubmit={onSubmit} id="deviceForm" className="form">
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_id">Flat</label>
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
                 <select id="flat_id" value={selectedFlat} onChange={e => setSelectedFlat(e.target.value)} required className="form-control">
-                  <option value="">-- Pilih Flat --</option>
+                  <option value="">-- Pilih Rusun --</option>
                   {flats.map(f => (
                     <option key={f.flat_id} value={f.flat_id}>{f.flat_name}</option>
                   ))}
@@ -135,9 +135,9 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="tower_id">Tower</label>
+                <label className="form-label" htmlFor="tower_id">Pilih Tower</label>
                 <select id="tower_id" value={selectedTower} onChange={e => setSelectedTower(e.target.value)} required className="form-control" disabled={!selectedFlat}>
-                  <option value="">{selectedFlat ? '-- Pilih Tower --' : 'Pilih Flat terlebih dahulu'}</option>
+                  <option value="">{selectedFlat ? '-- Pilih Tower --' : 'Pilih Rusun terlebih dahulu'}</option>
                   {towers.map(t => (
                     <option key={t.tower_id} value={t.tower_id}>{t.tower_name}</option>
                   ))}
@@ -145,9 +145,9 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="floor_id">Floor</label>
+                <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
                 <select id="floor_id" value={selectedFloor} onChange={e => setSelectedFloor(e.target.value)} required className="form-control" disabled={!selectedTower}>
-                  <option value="">{selectedTower ? '-- Pilih Floor --' : 'Pilih Tower terlebih dahulu'}</option>
+                  <option value="">{selectedTower ? '-- Pilih Lantai --' : 'Pilih Tower terlebih dahulu'}</option>
                   {floors.map(f => (
                     <option key={f.floor_id} value={f.floor_id}>{f.floor_number}</option>
                   ))}
@@ -155,9 +155,9 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="unit_id">Unit</label>
+                <label className="form-label" htmlFor="unit_id">Pilih Unit</label>
                 <select id="unit_id" value={selectedUnit} onChange={e => setSelectedUnit(e.target.value)} required className="form-control" disabled={!selectedFloor}>
-                  <option value="">{selectedFloor ? '-- Pilih Unit --' : 'Pilih Floor terlebih dahulu'}</option>
+                  <option value="">{selectedFloor ? '-- Pilih Unit --' : 'Pilih Lantai terlebih dahulu'}</option>
                   {units.map(u => (
                     <option key={u.unit_id} value={u.unit_id}>{u.unit_number}</option>
                   ))}
