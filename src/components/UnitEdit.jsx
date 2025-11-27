@@ -106,7 +106,7 @@ export default function UnitEdit() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="floor_id">Pilih Floor</label>
+                <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
                 <select id="floor_id" name="floor_id" value={form.floor_id} onChange={handleChange} required className="form-control">
                   <option value="">-- Pilih Floor --</option>
                   {floors.map((f) => (
@@ -116,9 +116,9 @@ export default function UnitEdit() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_id">Pilih Rusun (Flat)</label>
+                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
                 <select id="flat_id" name="flat_id" value={form.flat_id} onChange={handleChange} required className="form-control">
-                  <option value="">-- Pilih Flat --</option>
+                  <option value="">-- Pilih Rusun --</option>
                   {flats.map((fl) => (
                     <option key={fl.flat_id} value={fl.flat_id}>{fl.flat_name}</option>
                   ))}
