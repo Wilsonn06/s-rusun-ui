@@ -6,67 +6,80 @@ export default function DeviceEdit() {
   const navigate = useNavigate();
 
   const [device, setDevice] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [name, setName] = useState("");
   const [type, setType] = useState("");
-  
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
+  const [unitId, setUnitId] = useState(null);
+  const [flatId, setFlatId] = useState(null);
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/adm/devices/detail/${device_id}`)
-      .then((res) => res.json())
-      .then((data) => {
+    setLoading(true);
+
+    fetch(`${import.meta.env.VITE_API_BASE}/devices/${device_id}`)
+      .then(res => res.json())
+      .then(data => {
         setDevice(data);
         setName(data.device_name);
         setType(data.device_type);
+        setUnitId(data.unit_id);
+        setFlatId(data.flat_id);
+        setStatus(data.status);
       })
-      .catch(() => alert("Gagal memuat device"));
-  }, [device_id, API_BASE]);
+      .catch(err => {
+        console.error("[DeviceEdit] Error load:", err);
+        setError("Gagal memuat detail device.");
+      })
+      .finally(() => setLoading(false));
+  }, [device_id]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await fetch(`${API_BASE}/adm/devices/${device_id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/devices/${device_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           device_name: name,
           device_type: type,
+          unit_id: unitId,
+          flat_id: flatId,
+          status: status,
         }),
       });
 
       if (!res.ok) {
-        const txt = await res.text();
-        console.error("Update failed:", txt);
-        alert("Gagal memperbarui device");
+        console.error("[DeviceEdit] Update failed:", await res.text());
+        alert("Gagal memperbarui device.");
         return;
       }
 
-      alert("Berhasil diupdate");
+      alert("Device berhasil diperbarui.");
       navigate("/devices");
+
     } catch (err) {
-      console.error(err);
-      alert("Terjadi kesalahan saat memperbarui device");
+      console.error("[DeviceEdit] Error submit:", err);
+      alert("Terjadi kesalahan saat memperbarui device.");
     }
   };
 
-  if (!device)
-    return (
-      <div className="page">
-        <div className="container">
-          <div className="muted">Memuat...</div>
-        </div>
-      </div>
-    );
+  if (loading) return <div className="muted">Memuat data...</div>;
+  if (error) return <div className="error">{error}</div>;
+  if (!device) return <div className="muted">Device tidak ditemukan.</div>;
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Edit Device</h1>
+
           <div className="actions">
-            <button className="btn" type="button" onClick={() => navigate("/devices")}>
-              Batal
-            </button>
+            <button className="btn" onClick={() => navigate("/devices")}>Batal</button>
             <button className="btn btn-primary" type="submit" form="deviceEditForm">
               Simpan
             </button>
@@ -75,35 +88,54 @@ export default function DeviceEdit() {
 
         <div className="card">
           <div className="card-body">
+
             <form id="deviceEditForm" onSubmit={onSubmit} className="form">
+
               <div className="form-row">
-                <label className="form-label" htmlFor="device_name">
-                  Nama
-                </label>
+                <label className="form-label">ID Device</label>
+                <input className="form-control" value={device.device_id} disabled />
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Nama</label>
                 <input
-                  id="device_name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
                   className="form-control"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="device_type">
-                  Tipe
-                </label>
+                <label className="form-label">Tipe</label>
                 <input
-                  id="device_type"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  required
                   className="form-control"
+                  value={type}
+                  onChange={e => setType(e.target.value)}
+                  required
                 />
               </div>
+
+              <div className="form-row">
+                <label className="form-label">Unit</label>
+                <input className="form-control" value={unitId || "-"} disabled />
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Flat</label>
+                <input className="form-control" value={flatId || "-"} disabled />
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Status</label>
+                <input className="form-control" value={status || "-"} disabled />
+              </div>
+
             </form>
+
           </div>
         </div>
+
       </div>
     </div>
   );
