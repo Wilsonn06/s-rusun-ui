@@ -1,27 +1,22 @@
 import { useEffect, useState } from "react";
 
 export default function PemilikDetailApp() {
-  const pemilik_id = "PM001"; // Hardcode untuk user yang sedang login
+  const pemilik_id = "PM001";
 
   const [pemilik, setPemilik] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
-
   useEffect(() => {
     async function fetchPemilik() {
+      setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/app/pemilik/${pemilik_id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/pemilik/${pemilik_id}`);
         const data = await res.json();
 
-        if (!res.ok) {
-          setError(data.message || "Gagal mengambil data pemilik.");
-          return;
-        }
-
-        setPemilik(data.data || data);
-      } catch (err) {
+        if (!res.ok) setError(data.message || "Gagal mengambil data pemilik");
+        else setPemilik(data.data || data);
+      } catch {
         setError("Gagal terhubung ke server.");
       } finally {
         setLoading(false);
@@ -31,28 +26,50 @@ export default function PemilikDetailApp() {
     fetchPemilik();
   }, []);
 
-  if (loading) return <div className="muted">Memuat data...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
-
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Data Pemilik</h1>
         </div>
-        <div className="card">
-          <div className="card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div><strong>ID Pemilik:</strong> {pemilik.pemilik_id}</div>
-              <div><strong>Nama:</strong> {pemilik.nama}</div>
-              <div><strong>NIK:</strong> {pemilik.nik}</div>
-              <div><strong>Tanggal Lahir:</strong> {pemilik.tanggal_lahir}</div>
-              <div><strong>Jenis Kelamin:</strong> {pemilik.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</div>
-              <div><strong>No HP:</strong> {pemilik.no_hp}</div>
-              <div style={{ gridColumn: '1 / -1' }}><strong>Alamat:</strong> {pemilik.alamat}</div>
+
+        {loading && <div className="muted">Memuat data...</div>}
+        {!loading && error && <div className="error">{error}</div>}
+
+        {!loading && !error && pemilik && (
+          <div className="card">
+            <div className="card-body">
+
+              <div className="grid-info">
+
+                <div className="muted">ID Pemilik</div>
+                <div>{pemilik.pemilik_id}</div>
+
+                <div className="muted">Nama</div>
+                <div>{pemilik.nama || "-"}</div>
+
+                <div className="muted">NIK</div>
+                <div>{pemilik.nik || "-"}</div>
+
+                <div className="muted">Tanggal Lahir</div>
+                <div>{pemilik.tanggal_lahir || "-"}</div>
+
+                <div className="muted">Jenis Kelamin</div>
+                <div>{pemilik.jenis_kelamin || "-"}</div>
+
+                <div className="muted">No HP</div>
+                <div>{pemilik.no_telepon || "-"}</div>
+
+                <div className="muted">Alamat</div>
+                <div>{pemilik.alamat || "-"}</div>
+
+              </div>
+
             </div>
           </div>
-        </div>
+        )}
+
       </div>
     </div>
   );
