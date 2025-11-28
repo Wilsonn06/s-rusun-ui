@@ -5,8 +5,10 @@ export default function DeviceList() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE}/adm/devices`)
+    fetch(`${API_BASE}/adm/devices`)
       .then(res => res.json())
       .then(data => setList(data.devices || []))
       .catch(() => alert("Gagal memuat device"));
@@ -18,7 +20,7 @@ export default function DeviceList() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/devices/${id}`, {
+      const res = await fetch(`${API_BASE}/adm/devices/${id}`, {
         method: "DELETE",
       });
 
