@@ -77,7 +77,7 @@ export default function UnitDetail() {
               </div>
             </div>
 
-            <div className="section-title">Daftar Sensor / Perangkat</div>
+            <div className="section-title">Daftar Device</div>
 
             <div className="card">
               <div className="card-body">
@@ -91,7 +91,7 @@ export default function UnitDetail() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>ID Devices</th>
+                        <th>ID Device</th>
                         <th>Device</th>
                         <th>Tipe Device</th>
                         <th>Status Device</th>
