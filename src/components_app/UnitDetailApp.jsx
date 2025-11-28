@@ -11,6 +11,8 @@ export default function UnitDetailApp() {
   const [loadingSensors, setLoadingSensors] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+  
   const fetchUnitDetail = async () => {
     try {
       const res = await fetch(`${API_BASE}/app/unit/${unit_id}`);
