@@ -14,6 +14,8 @@ export default function PemilikForm() {
 
   const navigate = useNavigate();
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
