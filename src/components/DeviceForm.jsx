@@ -17,55 +17,57 @@ export default function DeviceForm() {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
 
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
-  
-  // Load flats
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    fetch(`${API_BASE}/adm/flat`)
+    setLoading(true);
+    fetch(`${import.meta.env.VITE_API_BASE}/flat`)
       .then(res => res.json())
-      .then(data => setFlats(data || []))
+      .then(data => {
+        setFlats(data || []);
+        setLoading(false);
+      })
       .catch(err => {
-        console.error(err);
-        alert("Gagal memuat flat");
+        console.error("[DeviceForm] Error load flats:", err);
+        setError("Gagal memuat data rusun.");
+        setLoading(false);
       });
   }, []);
 
-  // Load towers
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`${API_BASE}/adm/tower`)
+    fetch(`${import.meta.env.VITE_API_BASE}/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
-        console.error(err);
-        alert("Gagal memuat tower");
+        console.error("[DeviceForm] Error load towers:", err);
+        alert("Gagal memuat data tower.");
       });
   }, [selectedFlat]);
 
-  // Load floors
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`${API_BASE}/adm/floor`)
+    fetch(`${import.meta.env.VITE_API_BASE}/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
-        console.error(err);
-        alert("Gagal memuat floor");
+        console.error("[DeviceForm] Error load floors:", err);
+        alert("Gagal memuat data lantai.");
       });
   }, [selectedTower]);
 
-  // Load units
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`${API_BASE}/adm/unit`)
+    fetch(`${import.meta.env.VITE_API_BASE}/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
-        console.error(err);
-        alert("Gagal memuat unit");
+        console.error("[DeviceForm] Error load units:", err);
+        alert("Gagal memuat data unit.");
       });
   }, [selectedFloor]);
 
@@ -73,12 +75,12 @@ export default function DeviceForm() {
     e.preventDefault();
 
     if (!deviceName || !deviceType || !selectedUnit) {
-      alert("Nama device, type, dan unit wajib diisi");
+      alert("Nama device, tipe, dan unit wajib diisi.");
       return;
     }
 
     try {
-      const res = await fetch(`${API_BASE}/adm/devices`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,16 +92,14 @@ export default function DeviceForm() {
       });
 
       if (!res.ok) {
-        const text = await res.text();
-        console.error("Error response:", text);
-        alert("Gagal menambah device");
+        console.error("[DeviceForm] Add failed:", await res.text());
+        alert("Gagal menambah device.");
         return;
       }
 
-      alert("Device berhasil ditambahkan");
+      alert("Device berhasil ditambahkan.");
       navigate("/devices");
 
-      // reset form
       setSelectedFlat("");
       setSelectedTower("");
       setSelectedFloor("");
@@ -107,28 +107,40 @@ export default function DeviceForm() {
       setDeviceName("");
       setDeviceType("");
     } catch (err) {
-      console.error(err);
-      alert("Gagal menambah device");
+      console.error("[DeviceForm] Error:", err);
+      alert("Terjadi kesalahan saat menambah device.");
     }
   };
+
+  if (loading) return <div className="muted">Memuat data...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Tambah Device</h1>
           <div className="actions">
-            <button className="btn" type="button" onClick={() => navigate('/devices')}>Batal</button>
-            <button className="btn btn-primary" type="submit" form="deviceForm">Simpan</button>
+            <button className="btn" onClick={() => navigate('/devices')}>Batal</button>
+            <button className="btn btn-primary" form="deviceForm">Simpan</button>
           </div>
         </div>
 
         <div className="card">
           <div className="card-body">
-            <form onSubmit={onSubmit} id="deviceForm" className="form">
+
+            <form id="deviceForm" onSubmit={onSubmit} className="form">
+
+              {/* Rusun */}
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
-                <select id="flat_id" value={selectedFlat} onChange={e => setSelectedFlat(e.target.value)} required className="form-control">
+                <label className="form-label">Pilih Rusun</label>
+                <select
+                  className="form-control"
+                  value={selectedFlat}
+                  onChange={e => setSelectedFlat(e.target.value)}
+                  required
+                >
                   <option value="">-- Pilih Rusun --</option>
                   {flats.map(f => (
                     <option key={f.flat_id} value={f.flat_id}>{f.flat_name}</option>
@@ -137,9 +149,17 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="tower_id">Pilih Tower</label>
-                <select id="tower_id" value={selectedTower} onChange={e => setSelectedTower(e.target.value)} required className="form-control" disabled={!selectedFlat}>
-                  <option value="">{selectedFlat ? '-- Pilih Tower --' : 'Pilih Rusun terlebih dahulu'}</option>
+                <label className="form-label">Pilih Tower</label>
+                <select
+                  className="form-control"
+                  value={selectedTower}
+                  onChange={e => setSelectedTower(e.target.value)}
+                  required
+                  disabled={!selectedFlat}
+                >
+                  <option value="">
+                    {selectedFlat ? "-- Pilih Tower --" : "Pilih Rusun terlebih dahulu"}
+                  </option>
                   {towers.map(t => (
                     <option key={t.tower_id} value={t.tower_id}>{t.tower_name}</option>
                   ))}
@@ -147,9 +167,17 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
-                <select id="floor_id" value={selectedFloor} onChange={e => setSelectedFloor(e.target.value)} required className="form-control" disabled={!selectedTower}>
-                  <option value="">{selectedTower ? '-- Pilih Lantai --' : 'Pilih Tower terlebih dahulu'}</option>
+                <label className="form-label">Pilih Lantai</label>
+                <select
+                  className="form-control"
+                  value={selectedFloor}
+                  onChange={e => setSelectedFloor(e.target.value)}
+                  required
+                  disabled={!selectedTower}
+                >
+                  <option value="">
+                    {selectedTower ? "-- Pilih Lantai --" : "Pilih Tower terlebih dahulu"}
+                  </option>
                   {floors.map(f => (
                     <option key={f.floor_id} value={f.floor_id}>{f.floor_number}</option>
                   ))}
@@ -157,9 +185,17 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="unit_id">Pilih Unit</label>
-                <select id="unit_id" value={selectedUnit} onChange={e => setSelectedUnit(e.target.value)} required className="form-control" disabled={!selectedFloor}>
-                  <option value="">{selectedFloor ? '-- Pilih Unit --' : 'Pilih Lantai terlebih dahulu'}</option>
+                <label className="form-label">Pilih Unit</label>
+                <select
+                  className="form-control"
+                  value={selectedUnit}
+                  onChange={e => setSelectedUnit(e.target.value)}
+                  required
+                  disabled={!selectedFloor}
+                >
+                  <option value="">
+                    {selectedFloor ? "-- Pilih Unit --" : "Pilih Lantai terlebih dahulu"}
+                  </option>
                   {units.map(u => (
                     <option key={u.unit_id} value={u.unit_id}>{u.unit_number}</option>
                   ))}
@@ -167,17 +203,30 @@ export default function DeviceForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="device_name">Nama Device</label>
-                <input id="device_name" value={deviceName} onChange={e => setDeviceName(e.target.value)} required className="form-control" />
+                <label className="form-label">Nama Device</label>
+                <input
+                  className="form-control"
+                  value={deviceName}
+                  onChange={e => setDeviceName(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="device_type">Tipe Device</label>
-                <input id="device_type" value={deviceType} onChange={e => setDeviceType(e.target.value)} required className="form-control" />
+                <label className="form-label">Tipe Device</label>
+                <input
+                  className="form-control"
+                  value={deviceType}
+                  onChange={e => setDeviceType(e.target.value)}
+                  required
+                />
               </div>
+
             </form>
+
           </div>
         </div>
+
       </div>
     </div>
   );
