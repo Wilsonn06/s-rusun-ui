@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getUnitDetail, getDevicesByUnit } from '../api';
-
+//
 export default function UnitDetail() {
   const { unit_id } = useParams();
   const navigate = useNavigate();
