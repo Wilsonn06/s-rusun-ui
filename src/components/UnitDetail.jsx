@@ -94,7 +94,7 @@ export default function UnitDetail() {
                         <th>ID</th>
                         <th>Device</th>
                         <th>Tipe Device</th>
-                        <th>Status</th>
+                        <th>Status Device</th>
                       </tr>
                     </thead>
                     <tbody>
