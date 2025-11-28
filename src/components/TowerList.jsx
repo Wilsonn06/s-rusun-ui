@@ -10,13 +10,16 @@ export default function TowerList() {
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       try {
         const data = flat_id
           ? await getTowerByFlat(flat_id)
           : await getAllTower();
+
         setTower(data);
-      } catch {
-        alert('Gagal memuat tower.');
+      } catch (err) {
+        console.error('[TowerList] Error memuat tower:', err);
+        alert('Terjadi kesalahan saat memuat data tower.');
       } finally {
         setLoading(false);
       }
@@ -25,27 +28,32 @@ export default function TowerList() {
   }, [flat_id]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Yakin hapus tower ini?')) return;
+    if (!window.confirm('Yakin ingin menghapus tower ini?')) return;
+
     try {
       await deleteTower(id);
       setTower(tower.filter((t) => t.tower_id !== id));
-    } catch {
-      alert('Gagal menghapus tower.');
+      alert('Tower berhasil dihapus.');
+    } catch (err) {
+      console.error('[TowerList] Error menghapus tower:', err);
+      alert('Terjadi kesalahan saat menghapus tower.');
     }
   };
 
-  const handleDetail = (tower_id) => {
-    navigate(`/tower/${tower_id}`);
-  };
-  
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
-          <h1 className="page-title">{flat_id ? `Tower pada Flat ${flat_id}` : 'Daftar Tower'}</h1>
+          <h1 className="page-title">
+            {flat_id ? `Tower pada Flat ${flat_id}` : 'Daftar Tower'}
+          </h1>
+
           <div className="actions">
             {flat_id && (
-              <button className="btn" onClick={() => navigate('/flat')}>Kembali ke Flat</button>
+              <button className="btn" onClick={() => navigate('/flat')}>
+                Kembali ke Flat
+              </button>
             )}
             <button className="btn btn-primary" onClick={() => navigate('/tower/add')}>
               + Tower
@@ -54,10 +62,11 @@ export default function TowerList() {
         </div>
 
         {loading ? (
-          <div className="muted">Loading...</div>
+          <div className="muted">Memuat data...</div>
         ) : (
           <div className="card">
             <div className="card-body">
+
               <table className="table">
                 <thead>
                   <tr>
@@ -67,6 +76,7 @@ export default function TowerList() {
                     <th style={{ width: 180 }}>Aksi</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {tower.length === 0 ? (
                     <tr>
@@ -76,24 +86,43 @@ export default function TowerList() {
                     tower.map((t) => (
                       <tr key={t.tower_id}>
                         <td>{t.tower_id}</td>
+
                         <td>
-                          <Link className="link-plain" to={`/tower/${t.tower_id}`}>{t.tower_name}</Link>
+                          <Link className="link-plain" to={`/tower/${t.tower_id}`}>
+                            {t.tower_name}
+                          </Link>
                         </td>
+
                         <td>{t.flat_name || '-'}</td>
+
                         <td>
                           <div className="actions">
-                            <button className="btn btn-sm" onClick={() => navigate(`/tower/edit/${t.tower_id}`)}>Edit</button>
-                            <button className="btn btn-sm btn-danger" onClick={() => handleDelete(t.tower_id)}>Hapus</button>
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => navigate(`/tower/edit/${t.tower_id}`)}
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(t.tower_id)}
+                            >
+                              Hapus
+                            </button>
                           </div>
                         </td>
+
                       </tr>
                     ))
                   )}
                 </tbody>
               </table>
+
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
