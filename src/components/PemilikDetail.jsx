@@ -5,106 +5,116 @@ import { getUnitsByPemilik } from '../api';
 export default function PemilikDetail() {
   const { pemilik_id } = useParams();
   const navigate = useNavigate();
+
   const [pemilik, setPemilik] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [units, setUnits] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
-
   useEffect(() => {
-    const fetchDetail = async () => {
+    const loadDetail = async () => {
+      setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/adm/pemilik/${pemilik_id}`);
-        if (!res.ok) throw new Error('Gagal memuat detail pemilik');
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/pemilik/${pemilik_id}`);
+        if (!res.ok) throw new Error("Failed");
+
         const data = await res.json();
         setPemilik(data);
-        // Load units owned
+
         try {
-          const unitList = await getUnitsByPemilik(pemilik_id);
-          setUnits(unitList);
-        } catch (e) {
-          // units optional
+          const unitOwned = await getUnitsByPemilik(pemilik_id);
+          setUnits(unitOwned);
+        } catch {
           setUnits([]);
         }
-      } catch (e) {
-        setError('Gagal memuat detail pemilik');
+
+      } catch (err) {
+        console.error("[PemilikDetail] Error:", err);
+        setError("Gagal memuat detail pemilik.");
       } finally {
         setLoading(false);
       }
     };
-    fetchDetail();
-  }, [pemilik_id]);
 
-  if (loading) return <div className="page"><div className="container"><div className="muted">Memuat...</div></div></div>;
-  if (error) return <div className="page"><div className="container"><div style={{ color: 'red' }}>{error}</div></div></div>;
-  if (!pemilik) return <div className="page"><div className="container"><div className="muted">Data tidak ditemukan</div></div></div>;
+    loadDetail();
+  }, [pemilik_id]);
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Detail Pemilik</h1>
           <div className="actions">
             <button className="btn" onClick={() => navigate('/pemilik')}>Kembali</button>
-            <button className="btn btn-primary" onClick={() => navigate(`/pemilik/edit/${pemilik.pemilik_id}`)}>Edit</button>
-          </div>
-        </div>
-
-        <div className="card" style={{ marginBottom: 16 }}>
-          <div className="card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: 8 }}>
-              <div className="muted">ID</div>
-              <div>{pemilik.pemilik_id}</div>
-              <div className="muted">Nama</div>
-              <div>{pemilik.nama}</div>
-              <div className="muted">NIK</div>
-              <div>{pemilik.nik}</div>
-              <div className="muted">Tanggal Lahir</div>
-              <div>{pemilik.tanggal_lahir || '-'}</div>
-              <div className="muted">Jenis Kelamin</div>
-              <div>{pemilik.jenis_kelamin || '-'}</div>
-              <div className="muted">No. Telepon</div>
-              <div>{pemilik.no_telepon || '-'}</div>
-              <div className="muted">Alamat</div>
-              <div>{pemilik.alamat || '-'}</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="section-title">Daftar Unit</div>
-        <div className="card">
-          <div className="card-body">
-            {units.length > 0 ? (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>ID Unit</th>
-                    <th>Nomor Unit</th>
-                    <th>Lantai</th>
-                    <th>Tower</th>
-                    <th>Rusun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {units.map((u) => (
-                    <tr key={u.unit_id}>
-                      <td>{u.unit_id}</td>
-                      <td>
-                        <Link className="link-plain" to={`/unit/${u.unit_id}`}>{u.unit_number}</Link>
-                      </td>
-                      <td>{u.floor_number || '-'}</td>
-                      <td>{u.tower_name || '-'}</td>
-                      <td>{u.flat_name || '-'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="muted">Belum ada unit terdaftar.</div>
+            {pemilik && (
+              <button className="btn btn-primary" onClick={() => navigate(`/pemilik/edit/${pemilik.pemilik_id}`)}>
+                Edit
+              </button>
             )}
           </div>
         </div>
+
+        {loading && <div className="muted">Memuat data...</div>}
+        {!loading && error && <div className="error">{error}</div>}
+
+        {!loading && !error && pemilik && (
+          <>
+            <div className="card" style={{ marginBottom: 16 }}>
+              <div className="card-body">
+                <div style={{ display: "grid", gridTemplateColumns: "160px 1fr", rowGap: 8 }}>
+                  <div className="muted">ID</div><div>{pemilik.pemilik_id}</div>
+                  <div className="muted">Nama</div><div>{pemilik.nama}</div>
+                  <div className="muted">NIK</div><div>{pemilik.nik}</div>
+                  <div className="muted">Tanggal Lahir</div><div>{pemilik.tanggal_lahir || "-"}</div>
+                  <div className="muted">Jenis Kelamin</div><div>{pemilik.jenis_kelamin || "-"}</div>
+                  <div className="muted">No Telepon</div><div>{pemilik.no_telepon || "-"}</div>
+                  <div className="muted">Alamat</div><div>{pemilik.alamat || "-"}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="section-title">Daftar Unit</div>
+
+            <div className="card">
+              <div className="card-body">
+
+                {units.length === 0 ? (
+                  <div className="muted">Belum ada unit terdaftar.</div>
+                ) : (
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>ID Unit</th>
+                        <th>Nomor Unit</th>
+                        <th>Lantai</th>
+                        <th>Tower</th>
+                        <th>Rusun</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {units.map(u => (
+                        <tr key={u.unit_id}>
+                          <td>{u.unit_id}</td>
+                          <td>
+                            <Link className="link-plain" to={`/unit/${u.unit_id}`}>
+                              {u.unit_number}
+                            </Link>
+                          </td>
+                          <td>{u.floor_number}</td>
+                          <td>{u.tower_name}</td>
+                          <td>{u.flat_name}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+
+              </div>
+            </div>
+          </>
+        )}
+
       </div>
     </div>
   );
