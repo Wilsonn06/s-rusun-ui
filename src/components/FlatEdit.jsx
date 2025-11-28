@@ -10,7 +10,10 @@ export default function FlatEdit() {
   useEffect(() => {
     getFlatById(flat_id)
       .then((data) => setForm(data))
-      .catch(() => alert('Gagal memuat data flat.'));
+      .catch((err) => {
+        console.error('[FlatEdit] Error memuat data:', err);
+        alert('Terjadi kesalahan saat memuat data rusun.');
+      });
   }, [flat_id]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,17 +22,15 @@ export default function FlatEdit() {
     e.preventDefault();
     try {
       await updateFlat(flat_id, form);
-      alert('Flat berhasil diperbarui.');
+      alert('Rusun berhasil diperbarui.');
       navigate('/flat');
-    } catch {
-      alert('Gagal memperbarui flat.');
+    } catch (err) {
+      console.error('[FlatEdit] Error update flat:', err);
+      alert('Terjadi kesalahan saat memperbarui rusun.');
     }
   };
 
-  const handleCancel = () => {
-    // Navigasi kembali ke halaman list tanpa menyimpan
-    navigate('/flat');
-  };
+  const handleCancel = () => navigate('/flat');
 
   return (
     <div className="page">
@@ -37,36 +38,39 @@ export default function FlatEdit() {
         <div className="page-header">
           <h1 className="page-title">Edit Rumah Susun</h1>
           <div className="actions">
-            <button className="btn" type="button" onClick={handleCancel}>Batal</button>
+            <button className="btn" onClick={handleCancel}>Batal</button>
             <button className="btn btn-primary" form="flatEditForm" type="submit">Simpan</button>
           </div>
         </div>
 
         <div className="card">
           <div className="card-body">
-            <form id="flatEditForm" onSubmit={handleSubmit} className="form">
+            <form id="flatEditForm" className="form" onSubmit={handleSubmit}>
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_name">Nama Rusun</label>
+                <label className="form-label">ID Rusun</label>
+                <div className="muted">{form.flat_id}</div>
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Nama Rusun</label>
                 <input
-                  id="flat_name"
-                  className="form-control"
                   name="flat_name"
+                  className="form-control"
                   value={form.flat_name}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_address">Alamat</label>
+                <label className="form-label">Alamat</label>
                 <input
-                  id="flat_address"
-                  className="form-control"
                   name="flat_address"
+                  className="form-control"
                   value={form.flat_address}
                   onChange={handleChange}
                 />
               </div>
+
             </form>
           </div>
         </div>
