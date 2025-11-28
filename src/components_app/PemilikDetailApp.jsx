@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
 
+function formatTanggal(dateString) {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+}
+
 export default function PemilikDetailApp() {
   const pemilik_id = "PM001";
 
@@ -53,7 +64,7 @@ export default function PemilikDetailApp() {
                 <div>{pemilik.nik || "-"}</div>
 
                 <div className="muted">Tanggal Lahir</div>
-                <div>{pemilik.tanggal_lahir || "-"}</div>
+                <div>{formatTanggal(pemilik.tanggal_lahir)}</div>
 
                 <div className="muted">Jenis Kelamin</div>
                 <div>{pemilik.jenis_kelamin || "-"}</div>
