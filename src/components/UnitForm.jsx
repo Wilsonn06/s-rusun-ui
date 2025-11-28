@@ -11,7 +11,6 @@ export default function UnitForm() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // ambil nilai dari query jika ada
   const floorQuery = searchParams.get('floor_id');
   const flatQuery = searchParams.get('flat_id');
 
@@ -23,12 +22,9 @@ export default function UnitForm() {
     floor_id: floorQuery || '',
   });
 
-  // Data dropdown
   const [flats, setFlats] = useState([]);
   const [towers, setTowers] = useState([]);
   const [floors, setFloors] = useState([]);
-
-  // Filter hasil
   const [filteredTowers, setFilteredTowers] = useState([]);
   const [filteredFloors, setFilteredFloors] = useState([]);
 
@@ -44,27 +40,25 @@ export default function UnitForm() {
         setTowers(towerData);
         setFloors(floorData);
       } catch (err) {
-        console.error('Gagal memuat data dropdown:', err);
-        alert('Gagal memuat data rusun/tower/lantai');
+        console.error('[UnitForm] Error memuat dropdown:', err);
+        alert('Terjadi kesalahan saat memuat data dropdown.');
       }
     };
     fetchData();
   }, []);
 
-  // Filter tower berdasarkan flat
   useEffect(() => {
     if (form.flat_id) {
       const filtered = towers.filter((t) => t.flat_id === form.flat_id);
       setFilteredTowers(filtered);
-      setForm((prev) => ({ ...prev, tower_id: '', floor_id: '' }));
       setFilteredFloors([]);
+      setForm((prev) => ({ ...prev, tower_id: '', floor_id: '' }));
     } else {
       setFilteredTowers([]);
       setFilteredFloors([]);
     }
   }, [form.flat_id, towers]);
 
-  // Filter floor berdasarkan tower
   useEffect(() => {
     if (form.tower_id) {
       const filtered = floors.filter((f) => f.tower_id === form.tower_id);
@@ -75,38 +69,52 @@ export default function UnitForm() {
     }
   }, [form.tower_id, floors]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await createUnit(form);
-      alert('✅ Unit berhasil ditambahkan.');
+      await createUnit({
+        unit_id: form.unit_id,
+        unit_number: form.unit_number,
+        floor_id: form.floor_id,
+        pemilik_id: null
+      });
+
+      alert('Unit berhasil ditambahkan.');
       navigate('/unit');
     } catch (err) {
-      console.error(err);
-      alert('❌ Gagal menambah unit.');
+      console.error('[UnitForm] Error menambah unit:', err);
+      alert('Terjadi kesalahan saat menambah unit.');
     }
   };
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Tambah Unit</h1>
           <div className="actions">
-            <button className="btn" type="button" onClick={() => navigate('/unit')}>Batal</button>
-            <button className="btn btn-primary" type="submit" form="unitForm">Simpan</button>
+            <button className="btn" onClick={() => navigate('/unit')}>
+              Batal
+            </button>
+            <button className="btn btn-primary" type="submit" form="unitForm">
+              Simpan
+            </button>
           </div>
         </div>
 
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit} id="unitForm" className="form">
+
+            <form id="unitForm" onSubmit={handleSubmit} className="form">
+
               <div className="form-row">
-                <label className="form-label" htmlFor="unit_id">ID Unit</label>
+                <label className="form-label">ID Unit</label>
                 <input
-                  id="unit_id"
                   name="unit_id"
                   value={form.unit_id}
                   onChange={handleChange}
@@ -116,9 +124,8 @@ export default function UnitForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="unit_number">Nomor Unit</label>
+                <label className="form-label">Nomor Unit</label>
                 <input
-                  id="unit_number"
                   name="unit_number"
                   value={form.unit_number}
                   onChange={handleChange}
@@ -128,9 +135,8 @@ export default function UnitForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="flat_id">Pilih Rusun</label>
+                <label className="form-label">Pilih Rusun</label>
                 <select
-                  id="flat_id"
                   name="flat_id"
                   value={form.flat_id}
                   onChange={handleChange}
@@ -147,9 +153,8 @@ export default function UnitForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="tower_id">Pilih Tower</label>
+                <label className="form-label">Pilih Tower</label>
                 <select
-                  id="tower_id"
                   name="tower_id"
                   value={form.tower_id}
                   onChange={handleChange}
@@ -169,9 +174,8 @@ export default function UnitForm() {
               </div>
 
               <div className="form-row">
-                <label className="form-label" htmlFor="floor_id">Pilih Lantai</label>
+                <label className="form-label">Pilih Lantai</label>
                 <select
-                  id="floor_id"
                   name="floor_id"
                   value={form.floor_id}
                   onChange={handleChange}
@@ -189,11 +193,13 @@ export default function UnitForm() {
                   ))}
                 </select>
               </div>
+
             </form>
+
           </div>
         </div>
+
       </div>
     </div>
   );
 }
-// Remove old inline style objects; using global utility classes
