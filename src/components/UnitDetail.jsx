@@ -91,7 +91,7 @@ export default function UnitDetail() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>ID</th>
+                        <th>ID Devices</th>
                         <th>Device</th>
                         <th>Tipe Device</th>
                         <th>Status Device</th>
