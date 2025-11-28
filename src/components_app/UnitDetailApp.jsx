@@ -68,16 +68,16 @@ export default function UnitDetailApp() {
                   <div className="muted">Nomor Unit</div>
                   <div>{unit.unit_number}</div>
 
-                  <div className="muted">Pemilik</div>
+                  <div className="muted">Nama Pemilik</div>
                   <div>{unit.pemilik_nama || "-"}</div>
 
-                  <div className="muted">Tower</div>
+                  <div className="muted">Nama Tower</div>
                   <div>{unit.tower_name || "-"}</div>
 
-                  <div className="muted">Lantai</div>
+                  <div className="muted">Nomor Lantai</div>
                   <div>{unit.floor_number}</div>
 
-                  <div className="muted">Rusun</div>
+                  <div className="muted">Nama Rusun</div>
                   <div>{unit.flat_name}</div>
                 </div>
               </div>
@@ -94,10 +94,10 @@ export default function UnitDetailApp() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>ID</th>
-                        <th>Nama</th>
-                        <th>Tipe</th>
-                        <th>Status</th>
+                        <th>ID Device</th>
+                        <th>Device</th>
+                        <th>Tipe Device</th>
+                        <th>Status Device</th>
                       </tr>
                     </thead>
                     <tbody>
