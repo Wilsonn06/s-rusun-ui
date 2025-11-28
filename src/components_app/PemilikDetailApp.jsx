@@ -10,7 +10,7 @@ export default function PemilikDetailApp() {
   useEffect(() => {
     async function fetchPemilik() {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/pemilik/${pemilik_id}`);
+        const res = await fetch(`${API_BASE}/app/pemilik/${pemilik_id}`);
         const data = await res.json();
 
         if (!res.ok) {
