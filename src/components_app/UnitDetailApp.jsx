@@ -58,19 +58,32 @@ export default function UnitDetailApp() {
 
         {!loading && !error && unit && (
           <>
-            <div className="card">
+            {/* DETAIL UNIT */}
+            <div className="card" style={{ marginBottom: 16 }}>
               <div className="card-body">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <div><strong>ID Unit:</strong> {unit.unit_id}</div>
-                  <div><strong>Nomor Unit:</strong> {unit.unit_number}</div>
-                  <div><strong>Pemilik:</strong> {unit.pemilik_nama}</div>
-                  <div><strong>Tower:</strong> {unit.tower_name}</div>
-                  <div><strong>Lantai:</strong> {unit.floor_number}</div>
-                  <div><strong>Rusun:</strong> {unit.flat_name}</div>
+                <div className="grid-info">
+                  <div className="muted">ID</div>
+                  <div>{unit.unit_id}</div>
+
+                  <div className="muted">Nomor Unit</div>
+                  <div>{unit.unit_number}</div>
+
+                  <div className="muted">Pemilik</div>
+                  <div>{unit.pemilik_nama || "-"}</div>
+
+                  <div className="muted">Tower</div>
+                  <div>{unit.tower_name || "-"}</div>
+
+                  <div className="muted">Lantai</div>
+                  <div>{unit.floor_number}</div>
+
+                  <div className="muted">Rusun</div>
+                  <div>{unit.flat_name}</div>
                 </div>
               </div>
             </div>
 
+            {/* DAFTAR PERANGKAT */}
             <h2 className="section-title">Perangkat pada Unit</h2>
 
             <div className="card">
@@ -93,7 +106,17 @@ export default function UnitDetailApp() {
                           <td>{d.device_id}</td>
                           <td>{d.device_name}</td>
                           <td>{d.device_type}</td>
-                          <td>{d.status}</td>
+                          <td>
+                            <span className={`badge ${
+                              d.status === 'active'
+                                ? 'badge-success'
+                                : d.status
+                                ? 'badge-danger'
+                                : 'badge-muted'
+                            }`}>
+                              {d.status || 'unknown'}
+                            </span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
