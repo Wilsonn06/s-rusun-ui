@@ -21,7 +21,7 @@ export default function PemilikForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/pemilik`, {
+      const res = await fetch(`${API_BASE}/adm/pemilik`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
