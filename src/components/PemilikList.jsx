@@ -7,6 +7,8 @@ export default function PemilikList() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
   const fetchPemilik = async () => {
     try {
       const res = await fetch(`${API_BASE}/adm/pemilik`);
