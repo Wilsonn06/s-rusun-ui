@@ -58,7 +58,6 @@ export default function UnitDetailApp() {
 
         {!loading && !error && unit && (
           <>
-            {/* DETAIL UNIT */}
             <div className="card" style={{ marginBottom: 16 }}>
               <div className="card-body">
                 <div className="grid-info">
@@ -85,7 +84,7 @@ export default function UnitDetailApp() {
             </div>
 
             {/* DAFTAR PERANGKAT */}
-            <h2 className="section-title">Perangkat pada Unit</h2>
+            <h2 className="section-title">Daftar Unit</h2>
 
             <div className="card">
               <div className="card-body">
