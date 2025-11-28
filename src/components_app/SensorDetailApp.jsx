@@ -7,6 +7,8 @@ export default function SensorDetailApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
   useEffect(() => {
     async function fetchSensors() {
       try {
