@@ -11,36 +11,42 @@ export default function UnitEdit() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
+    unit_id: '',
     unit_number: '',
+    floor_number: '',
+    tower_name: '',
+    flat_name: '',
     pemilik_id: '',
+    floor_id: '',
   });
 
   const [pemiliks, setPemiliks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Ambil data unit + daftar pemilik
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [unitResponse, pemiliksData] = await Promise.all([
+        const [unit, pemiliksData] = await Promise.all([
           getUnitDetail(unit_id),
           getAllPemilik(),
         ]);
 
-        const unit = unitResponse;
-
-        // hanya field editable
         setForm({
+          unit_id: unit.unit_id,
           unit_number: unit.unit_number,
+          floor_number: unit.floor_number,
+          tower_name: unit.tower_name,
+          flat_name: unit.flat_name,
           pemilik_id: unit.pemilik_id || '',
+          floor_id: unit.floor_id,
         });
 
         setPemiliks(pemiliksData);
-        setLoading(false);
       } catch (err) {
-        console.error(err);
-        setError('Gagal memuat data unit.');
+        console.error('[UnitEdit] Error memuat data:', err);
+        setError('Terjadi kesalahan saat memuat data unit.');
+      } finally {
         setLoading(false);
       }
     };
@@ -48,33 +54,39 @@ export default function UnitEdit() {
     loadData();
   }, [unit_id]);
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await updateUnit(unit_id, form);
-      alert('Unit berhasil diperbarui!');
+      await updateUnit(unit_id, {
+        unit_number: form.unit_number,
+        pemilik_id: form.pemilik_id,
+        floor_id: form.floor_id
+      });
+
+      alert('Unit berhasil diperbarui.');
       navigate('/unit');
     } catch (err) {
-      console.error(err);
-      alert('Gagal memperbarui unit.');
+      console.error('[UnitEdit] Error update unit:', err);
+      alert('Terjadi kesalahan saat memperbarui unit.');
     }
   };
 
   if (loading) return <div className="muted">Memuat data...</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Edit Unit</h1>
 
           <div className="actions">
-            <button className="btn" type="button" onClick={() => navigate('/unit')}>
+            <button className="btn" onClick={() => navigate('/unit')}>
               Batal
             </button>
             <button className="btn btn-primary" type="submit" form="unitEditForm">
@@ -85,14 +97,18 @@ export default function UnitEdit() {
 
         <div className="card">
           <div className="card-body">
+
             <form id="unitEditForm" onSubmit={handleSubmit} className="form">
 
-              {/* Nomor Unit */}
+              <div className="form-row">
+                <label className="form-label">ID Unit</label>
+                <div className="muted">{form.unit_id}</div>
+              </div>
+
               <div className="form-row">
                 <label className="form-label" htmlFor="unit_number">Nomor Unit</label>
                 <input
                   id="unit_number"
-                  type="text"
                   name="unit_number"
                   value={form.unit_number}
                   onChange={handleChange}
@@ -101,9 +117,23 @@ export default function UnitEdit() {
                 />
               </div>
 
-              {/* Pemilik */}
               <div className="form-row">
-                <label className="form-label" htmlFor="pemilik_id">Pemilik Unit</label>
+                <label className="form-label">Rusun</label>
+                <div className="muted">{form.flat_name}</div>
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Lantai</label>
+                <div className="muted">{form.floor_number}</div>
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Tower</label>
+                <div className="muted">{form.tower_name}</div>
+              </div>
+
+              <div className="form-row">
+                <label className="form-label">Pemilik Unit</label>
                 <select
                   id="pemilik_id"
                   name="pemilik_id"
@@ -111,7 +141,8 @@ export default function UnitEdit() {
                   onChange={handleChange}
                   className="form-control"
                 >
-                  <option value="">-- Tidak Ada Pemilik --</option>
+                  <option value="">-- Belum Ada Pemilik --</option>
+
                   {pemiliks.map((p) => (
                     <option key={p.pemilik_id} value={p.pemilik_id}>
                       {p.nama} ({p.pemilik_id})
@@ -121,8 +152,10 @@ export default function UnitEdit() {
               </div>
 
             </form>
+
           </div>
         </div>
+
       </div>
     </div>
   );
