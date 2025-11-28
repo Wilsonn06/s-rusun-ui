@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
+//
 export default function DeviceDetail() {
   const { device_id } = useParams();
   const navigate = useNavigate();
