@@ -6,6 +6,8 @@ export default function UnitListApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+
   const fetchUnits = async () => {
     try {
       setLoading(true);
