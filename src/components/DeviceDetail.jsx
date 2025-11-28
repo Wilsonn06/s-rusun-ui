@@ -49,16 +49,16 @@ export default function DeviceDetail() {
                 <div className="muted">ID</div>
                 <div>{device.device_id}</div>
 
-                <div className="muted">Nama</div>
+                <div className="muted">Device</div>
                 <div>{device.device_name}</div>
 
-                <div className="muted">Tipe</div>
+                <div className="muted">Tipe Device</div>
                 <div>{device.device_type}</div>
 
-                <div className="muted">Status</div>
+                <div className="muted">Status Device</div>
                 <div>{device.status || "-"}</div>
 
-                <div className="muted">Unit</div>
+                <div className="muted">ID Unit</div>
                 <div>
                   {device.unit_id ? (
                     <Link className="link-plain" to={`/unit/${device.unit_id}`}>
