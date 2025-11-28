@@ -17,9 +17,11 @@ export default function DeviceForm() {
   const [deviceName, setDeviceName] = useState("");
   const [deviceType, setDeviceType] = useState("");
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+  
   // Load flats
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE}/adm/flat`)
+    fetch(`${API_BASE}/adm/flat`)
       .then(res => res.json())
       .then(data => setFlats(data || []))
       .catch(err => {
@@ -32,7 +34,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFlat) return setTowers([]);
 
-    fetch(`${import.meta.env.VITE_API_BASE}/adm/tower`)
+    fetch(`${API_BASE}/adm/tower`)
       .then(res => res.json())
       .then(data => setTowers(data.filter(t => t.flat_id == selectedFlat)))
       .catch(err => {
@@ -45,7 +47,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedTower) return setFloors([]);
 
-    fetch(`${import.meta.env.VITE_API_BASE}/adm/floor`)
+    fetch(`${API_BASE}/adm/floor`)
       .then(res => res.json())
       .then(data => setFloors(data.filter(f => f.tower_id == selectedTower)))
       .catch(err => {
@@ -58,7 +60,7 @@ export default function DeviceForm() {
   useEffect(() => {
     if (!selectedFloor) return setUnits([]);
 
-    fetch(`${import.meta.env.VITE_API_BASE}/adm/unit`)
+    fetch(`${API_BASE}/adm/unit`)
       .then(res => res.json())
       .then(data => setUnits(data.filter(u => u.floor_id == selectedFloor)))
       .catch(err => {
@@ -76,7 +78,7 @@ export default function DeviceForm() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/devices`, {
+      const res = await fetch(`${API_BASE}/adm/devices`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
