@@ -9,7 +9,7 @@ export default function PemilikList() {
 
   const fetchPemilik = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/adm/pemilik`);
+      const res = await fetch(`${API_BASE}/adm/pemilik`);
       if (!res.ok) {
         setError('Gagal memuat data pemilik');
         return;
@@ -30,7 +30,7 @@ export default function PemilikList() {
   const handleDelete = async (pemilik_id) => {
     if (!window.confirm('Yakin ingin menghapus pemilik ini?')) return;
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE}/adm/pemilik/${pemilik_id}`, {
+      await fetch(`${API_BASE}/adm/pemilik/${pemilik_id}`, {
         method: 'DELETE',
       });
       fetchPemilik();
