@@ -15,7 +15,6 @@ export default function FloorForm() {
   const [flats, setFlats] = useState([]);
   const navigate = useNavigate();
 
-  // Ambil daftar rusun (flat) dan tower
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -24,52 +23,64 @@ export default function FloorForm() {
         setFlats(flatData);
         setTowers(towerData);
       } catch (err) {
-        alert('Gagal memuat data.');
-        console.error(err);
+        console.error('[FloorForm] Error memuat data dropdown:', err);
+        alert('Terjadi kesalahan saat memuat data.');
       }
     };
     loadData();
   }, []);
 
-  // Filter tower berdasarkan rusun (flat) yang dipilih
   useEffect(() => {
     if (form.flat_id) {
       const filtered = towers.filter((t) => t.flat_id === form.flat_id);
       setFilteredTowers(filtered);
-      setForm((prev) => ({ ...prev, tower_id: '' })); // reset tower
+      setForm((prev) => ({ ...prev, tower_id: '' }));
     } else {
       setFilteredTowers([]);
     }
   }, [form.flat_id, towers]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createFloor(form);
-      alert('✅ Lantai berhasil ditambahkan.');
+      await createFloor({
+        floor_id: form.floor_id,
+        floor_number: form.floor_number,
+        tower_id: form.tower_id,
+      });
+
+      alert('Lantai berhasil ditambahkan.');
       navigate('/unit/add');
     } catch (err) {
-      alert('❌ Gagal menambah lantai.');
-      console.error(err);
+      console.error('[FloorForm] Error menambah lantai:', err);
+      alert('Terjadi kesalahan saat menambah lantai.');
     }
   };
 
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Tambah Lantai</h1>
           <div className="actions">
-            <button className="btn" type="button" onClick={() => navigate('/floor')}>Batal</button>
-            <button className="btn btn-primary" type="submit" form="floorForm">Simpan</button>
+            <button className="btn" onClick={() => navigate('/floor')}>
+              Batal
+            </button>
+            <button className="btn btn-primary" type="submit" form="floorForm">
+              Simpan
+            </button>
           </div>
         </div>
 
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit} id="floorForm" className="form">
+
+            <form id="floorForm" onSubmit={handleSubmit} className="form">
+
               <div className="form-row">
                 <label className="form-label" htmlFor="floor_id">ID Lantai</label>
                 <input
@@ -127,6 +138,7 @@ export default function FloorForm() {
                   <option value="">
                     {form.flat_id ? '-- Pilih Tower --' : 'Pilih Rusun Terlebih Dahulu'}
                   </option>
+
                   {filteredTowers.map((t) => (
                     <option key={t.tower_id} value={t.tower_id}>
                       {t.tower_name} ({t.tower_id})
@@ -134,11 +146,13 @@ export default function FloorForm() {
                   ))}
                 </select>
               </div>
+
             </form>
+
           </div>
         </div>
+
       </div>
     </div>
   );
 }
-// Remove old inline style objects; using global utility classes
