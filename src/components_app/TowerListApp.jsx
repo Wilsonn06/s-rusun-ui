@@ -5,61 +5,65 @@ export default function TowerListApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
-  
   useEffect(() => {
     const fetchTowers = async () => {
+      setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/app/tower`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/tower`);
         const data = await res.json();
 
         if (!res.ok) setError("Gagal mengambil tower");
         else setTowers(data.data || data || []);
-      } catch (err) {
+      } catch {
         setError("Kesalahan jaringan");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchTowers();
   }, []);
 
-  if (loading) return <div className="muted">Loading tower...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
-
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
           <h1 className="page-title">Tower Anda</h1>
         </div>
 
-        <div className="card">
-          <div className="card-body">
-            {towers.length === 0 ? (
-              <div className="muted">Tidak ada tower terdaftar.</div>
-            ) : (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>ID Tower</th>
-                    <th>Tower</th>
-                    <th>Rusun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {towers.map((t) => (
-                    <tr key={t.tower_id}>
-                      <td>{t.tower_id}</td>
-                      <td>{t.tower_name}</td>
-                      <td>{t.flat_name || '-'}</td>
+        {loading && <div className="muted">Memuat data...</div>}
+        {!loading && error && <div className="error">{error}</div>}
+
+        {!loading && !error && (
+          <div className="card">
+            <div className="card-body">
+              {towers.length === 0 ? (
+                <div className="muted">Tidak ada tower terdaftar.</div>
+              ) : (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>ID Tower</th>
+                      <th>Tower</th>
+                      <th>Rusun</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                  </thead>
+                  <tbody>
+                    {towers.map((t) => (
+                      <tr key={t.tower_id}>
+                        <td>{t.tower_id}</td>
+                        <td>{t.tower_name}</td>
+                        <td>{t.flat_name || "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
       </div>
     </div>
   );
