@@ -5,6 +5,8 @@ export default function FloorListApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
+  
   useEffect(() => {
     const fetchFloors = async () => {
       try {
