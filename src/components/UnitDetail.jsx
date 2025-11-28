@@ -63,7 +63,7 @@ export default function UnitDetail() {
                   <div className="muted">Nama Rusun</div>
                   <div>{unit.flat_name}</div>
 
-                  <div className="muted">Pemilik ID</div>
+                  <div className="muted">ID Pemilik</div>
                   <div>
                     {unit.pemilik_id ? (
                       <Link className="link-plain" to={`/pemilik/${unit.pemilik_id}`}>
