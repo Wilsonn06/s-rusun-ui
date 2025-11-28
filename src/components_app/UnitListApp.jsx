@@ -9,7 +9,7 @@ export default function UnitListApp() {
   const fetchUnits = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/unit`);
+      const res = await fetch(`${API_BASE}/app/unit`);
       const data = await res.json();
 
       if (!res.ok) {
