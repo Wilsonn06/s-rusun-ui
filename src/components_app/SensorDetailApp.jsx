@@ -10,7 +10,7 @@ export default function SensorDetailApp() {
   useEffect(() => {
     async function fetchSensors() {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/app/unit/${unit_id}/sensors`);
+        const res = await fetch(`${API_BASE}/app/unit/${unit_id}/sensors`);
         const result = await res.json();
 
         if (!res.ok) {
