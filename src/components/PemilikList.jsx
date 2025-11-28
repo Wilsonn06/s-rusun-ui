@@ -35,10 +35,12 @@ export default function PemilikList() {
 
   const handleDelete = async (pemilik_id) => {
     if (!confirm("Yakin ingin menghapus pemilik ini?")) return;
+
     try {
       await fetch(`${import.meta.env.VITE_API_BASE}/pemilik/${pemilik_id}`, {
         method: "DELETE"
       });
+
       fetchPemilik();
     } catch (err) {
       console.error("[PemilikList] Delete error:", err);
@@ -53,16 +55,20 @@ export default function PemilikList() {
         <div className="page-header">
           <h1 className="page-title">Daftar Pemilik</h1>
           <div className="actions">
-            <button className="btn btn-primary" onClick={() => navigate("/pemilik/add")}>
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate("/pemilik/add")}
+            >
               + Pemilik
             </button>
           </div>
         </div>
 
-        {loading && <div className="muted">Memuat data...</div>}
-        {error && <div className="error">{error}</div>}
-
-        {!loading && !error && (
+        {loading ? (
+          <div className="muted">Memuat data...</div>
+        ) : error ? (
+          <div className="error">{error}</div>
+        ) : (
           <div className="card">
             <div className="card-body">
 
@@ -75,6 +81,7 @@ export default function PemilikList() {
                     <th style={{ width: 160 }}>Aksi</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {pemilik.length === 0 ? (
                     <tr>
@@ -84,26 +91,37 @@ export default function PemilikList() {
                     pemilik.map((p) => (
                       <tr key={p.pemilik_id}>
                         <td>{p.pemilik_id}</td>
+
                         <td>
                           <Link className="link-plain" to={`/pemilik/${p.pemilik_id}`}>
                             {p.nama}
                           </Link>
                         </td>
+
                         <td>{p.total_unit > 0 ? p.total_unit : "-"}</td>
+
                         <td>
-                          <button className="btn btn-sm"
-                            onClick={() => navigate(`/pemilik/edit/${p.pemilik_id}`)}>
-                            Edit
-                          </button>{" "}
-                          <button className="btn btn-danger btn-sm"
-                            onClick={() => handleDelete(p.pemilik_id)}>
-                            Hapus
-                          </button>
+                          <div className="actions">
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => navigate(`/pemilik/edit/${p.pemilik_id}`)}
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(p.pemilik_id)}
+                            >
+                              Hapus
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
                   )}
                 </tbody>
+
               </table>
 
             </div>
