@@ -5,22 +5,16 @@ export default function FlatListApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE = window.__ENV__?.VITE_API_BASE || import.meta.env.VITE_API_BASE;
-
   useEffect(() => {
     const fetchFlats = async () => {
+      setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/app/flat`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/flat`);
         const data = await res.json();
 
-        if (!res.ok) {
-          setError("Gagal mengambil flat");
-        } else {
-          // sesuaikan dengan bentuk response backend APP
-          setFlats(data.data || data || []);
-        }
-      } catch (err) {
-        console.error(err);
+        if (!res.ok) setError("Gagal mengambil flat");
+        else setFlats(data.data || data || []);
+      } catch {
         setError("Kesalahan jaringan");
       } finally {
         setLoading(false);
@@ -30,40 +24,45 @@ export default function FlatListApp() {
     fetchFlats();
   }, []);
 
-  if (loading) return <div className="muted">Loading Rusun...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
-
   return (
     <div className="page">
       <div className="container">
+
         <div className="page-header">
-          <h1 className="page-title">Rusun Anda</h1>
+          <h1 className="page-title">Rumah Susun Anda</h1>
         </div>
 
-        <div className="card">
-          <div className="card-body">
-            {flats.length === 0 ? (
-              <div className="muted">Tidak ada rusun terdaftar.</div>
-            ) : (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>ID Rusun</th>
-                    <th>Rusun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {flats.map((f) => (
-                    <tr key={f.flat_id}>
-                      <td>{f.flat_id}</td>
-                      <td>{f.flat_name}</td>
+        {loading && <div className="muted">Memuat data...</div>}
+
+        {!loading && error && <div className="error">{error}</div>}
+
+        {!loading && !error && (
+          <div className="card">
+            <div className="card-body">
+              {flats.length === 0 ? (
+                <div className="muted">Tidak ada rusun terdaftar.</div>
+              ) : (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>ID Rusun</th>
+                      <th>Rusun</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                  </thead>
+                  <tbody>
+                    {flats.map((f) => (
+                      <tr key={f.flat_id}>
+                        <td>{f.flat_id}</td>
+                        <td>{f.flat_name}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
       </div>
     </div>
   );
