@@ -65,14 +65,15 @@ jobs:
       - name: Configure Docker for AR
         run: gcloud auth configure-docker asia-southeast2-docker.pkg.dev
 
-      # Build & Push image
+      # Build & Push image dengan tag unik sha-xxxxxxx
       - name: Build & Push Image
         run: |
           PROJECT_ID="${{ secrets.GCP_PROJECT_ID }}"
-          IMAGE="asia-southeast2-docker.pkg.dev/$PROJECT_ID/rusun-repo/s-rusun-ui:latest"
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-          docker build -t $IMAGE .
-          docker push $IMAGE
+          SHA_SHORT="${GITHUB_SHA::7}"
+          IMAGE="asia-southeast2-docker.pkg.dev/$PROJECT_ID/rusun-repo/s-rusun-ui:sha-$SHA_SHORT"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
 
       # Notify infra repo untuk GitOps
       - name: Notify infra repo
