@@ -1,3 +1,6 @@
+/* eslint-env node, jest */
+/* global vi, expect, describe, it, beforeEach, afterEach */
+
 import { render, screen, waitFor } from '@testing-library/react';
 import FlatListApp from './FlatListApp';
 

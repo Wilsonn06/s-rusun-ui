@@ -1,3 +1,6 @@
+/* eslint-env node, jest */
+/* global vi, expect, describe, it, beforeEach, afterEach */
+
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UnitList from './UnitList';
