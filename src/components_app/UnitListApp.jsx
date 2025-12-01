@@ -30,7 +30,7 @@ export default function UnitListApp() {
       <div className="container">
 
         <div className="page-header">
-          <h1 className="page-title">Unit Anda</h1>
+          <h1 className="page-title">Unit Saya</h1>
         </div>
 
         {loading && <div className="muted">Memuat data...</div>}

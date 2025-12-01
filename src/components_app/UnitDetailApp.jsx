@@ -45,7 +45,7 @@ export default function UnitDetailApp() {
       <div className="container">
 
         <div className="page-header">
-          <h1 className="page-title">Detail Unit Anda</h1>
+          <h1 className="page-title">Detail Unit Saya</h1>
           <div className="actions">
             <button className="btn" onClick={() => navigate("/app-ui/unit")}>
               Kembali
@@ -58,20 +58,32 @@ export default function UnitDetailApp() {
 
         {!loading && !error && unit && (
           <>
-            <div className="card">
+            <div className="card" style={{ marginBottom: 16 }}>
               <div className="card-body">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <div><strong>ID Unit:</strong> {unit.unit_id}</div>
-                  <div><strong>Nomor Unit:</strong> {unit.unit_number}</div>
-                  <div><strong>Pemilik:</strong> {unit.pemilik_nama}</div>
-                  <div><strong>Tower:</strong> {unit.tower_name}</div>
-                  <div><strong>Lantai:</strong> {unit.floor_number}</div>
-                  <div><strong>Rusun:</strong> {unit.flat_name}</div>
+                <div className="grid-info">
+                  <div className="muted">ID</div>
+                  <div>{unit.unit_id}</div>
+
+                  <div className="muted">Nomor Unit</div>
+                  <div>{unit.unit_number}</div>
+
+                  <div className="muted">Nomor Lantai</div>
+                  <div>{unit.floor_number}</div>
+
+                  <div className="muted">Nama Tower</div>
+                  <div>{unit.tower_name || "-"}</div>
+
+                  <div className="muted">Nama Rusun</div>
+                  <div>{unit.flat_name}</div>
+
+                  <div className="muted">Nama Pemilik</div>
+                  <div>{unit.pemilik_nama || "-"}</div>
+                  
                 </div>
               </div>
             </div>
 
-            <h2 className="section-title">Perangkat pada Unit</h2>
+            <h2 className="section-title">Daftar Device</h2>
 
             <div className="card">
               <div className="card-body">
@@ -81,10 +93,10 @@ export default function UnitDetailApp() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>ID</th>
-                        <th>Nama</th>
-                        <th>Tipe</th>
-                        <th>Status</th>
+                        <th>ID Device</th>
+                        <th>Device</th>
+                        <th>Tipe Device</th>
+                        <th>Status Device</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -93,7 +105,17 @@ export default function UnitDetailApp() {
                           <td>{d.device_id}</td>
                           <td>{d.device_name}</td>
                           <td>{d.device_type}</td>
-                          <td>{d.status}</td>
+                          <td>
+                            <span className={`badge ${
+                              d.status === 'active'
+                                ? 'badge-success'
+                                : d.status
+                                ? 'badge-danger'
+                                : 'badge-muted'
+                            }`}>
+                              {d.status || 'unknown'}
+                            </span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
