@@ -16,7 +16,7 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar" role="navigation" aria-label="Sidebar Navigation">
-      <h2 className="sidebar-title">Contoh 200 tes</h2>
+      <h2 className="sidebar-title">GKE-AUTO-TEST-999</h2>
       <ul className="nav-list">
         {menus.map((menu) => (
           <li className="nav-item" key={menu.path}>
