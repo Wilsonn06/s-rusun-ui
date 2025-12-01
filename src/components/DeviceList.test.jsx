@@ -1,5 +1,5 @@
 /* eslint-env node, jest */
-/* global vi, expect, describe, it, beforeEach, afterEach */
+/* global vi, expect, describe, it, beforeEach, afterEach, global */
 
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
