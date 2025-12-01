@@ -80,7 +80,7 @@ export default function FloorDetail() {
                       <tr>
                         <th>ID Unit</th>
                         <th>Nomor Unit</th>
-                        <th>Pemilik ID</th>
+                        <th>ID Pemilik</th>
                       </tr>
                     </thead>
                     <tbody>

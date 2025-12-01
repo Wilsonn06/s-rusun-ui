@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getUnitDetail, getDevicesByUnit } from '../api';
-
+//
 export default function UnitDetail() {
   const { unit_id } = useParams();
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function UnitDetail() {
                   <div className="muted">Nama Rusun</div>
                   <div>{unit.flat_name}</div>
 
-                  <div className="muted">Pemilik ID</div>
+                  <div className="muted">ID Pemilik</div>
                   <div>
                     {unit.pemilik_id ? (
                       <Link className="link-plain" to={`/pemilik/${unit.pemilik_id}`}>
@@ -77,7 +77,7 @@ export default function UnitDetail() {
               </div>
             </div>
 
-            <div className="section-title">Daftar Sensor / Perangkat</div>
+            <div className="section-title">Daftar Device</div>
 
             <div className="card">
               <div className="card-body">
@@ -91,10 +91,10 @@ export default function UnitDetail() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>ID</th>
-                        <th>Nama</th>
-                        <th>Tipe</th>
-                        <th>Status</th>
+                        <th>ID Device</th>
+                        <th>Device</th>
+                        <th>Tipe Device</th>
+                        <th>Status Device</th>
                       </tr>
                     </thead>
                     <tbody>

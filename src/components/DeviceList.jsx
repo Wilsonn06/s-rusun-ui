@@ -8,18 +8,22 @@ export default function DeviceList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${import.meta.env.VITE_API_BASE}/devices`)
-      .then((res) => res.json())
-      .then((data) => {
+    const loadDevices = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/devices`);
+        const data = await res.json();
         setList(data.devices || []);
         setError(null);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("[DeviceList] Error memuat:", err);
         setError("Gagal memuat daftar device.");
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDevices();
   }, []);
 
   const handleDelete = async (id) => {
@@ -51,6 +55,7 @@ export default function DeviceList() {
 
         <div className="page-header">
           <h1 className="page-title">Daftar Device</h1>
+
           <div className="actions">
             <button
               className="btn btn-primary"
@@ -61,25 +66,22 @@ export default function DeviceList() {
           </div>
         </div>
 
-        {loading && (
+        {loading ? (
           <div className="muted">Memuat data...</div>
-        )}
-
-        {!loading && error && (
+        ) : error ? (
           <div className="error">{error}</div>
-        )}
-
-        {!loading && !error && (
+        ) : (
           <div className="card">
             <div className="card-body">
+
               <table className="table">
                 <thead>
                   <tr>
                     <th>ID Device</th>
                     <th>Device</th>
-                    <th>Tipe</th>
-                    <th>Unit</th>
-                    <th>Status</th>
+                    <th>Tipe Device</th>
+                    <th>ID Unit</th>
+                    <th>Status Device</th>
                     <th style={{ width: 160 }}>Aksi</th>
                   </tr>
                 </thead>
@@ -95,10 +97,7 @@ export default function DeviceList() {
                         <td>{device.device_id}</td>
 
                         <td>
-                          <Link
-                            to={`/devices/${device.device_id}`}
-                            className="link-plain"
-                          >
+                          <Link className="link-plain" to={`/devices/${device.device_id}`}>
                             {device.device_name}
                           </Link>
                         </td>
@@ -108,40 +107,51 @@ export default function DeviceList() {
                         <td>
                           {device.unit_id ? (
                             <Link
-                              to={`/unit/${device.unit_id}`}
                               className="link-plain"
+                              to={`/unit/${device.unit_id}`}
                             >
                               {device.unit_number || device.unit_id}
                             </Link>
-                          ) : (
-                            "-"
-                          )}
+                          ) : "-"}
                         </td>
 
-                        <td>{device.status || "-"}</td>
+                        <td>
+                          <span className={`badge ${
+                            device.status === 'active'
+                              ? 'badge-success'
+                              : device.status
+                              ? 'badge-danger'
+                              : 'badge-muted'
+                          }`}>
+                            {device.status || 'unknown'}
+                          </span>
+                        </td>
 
                         <td>
-                          <button
-                            className="btn btn-sm"
-                            onClick={() =>
-                              navigate(`/devices/edit/${device.device_id}`)
-                            }
-                          >
-                            Edit
-                          </button>
+                          <div className="actions">
+                            <button
+                              className="btn btn-sm"
+                              onClick={() =>
+                                navigate(`/devices/edit/${device.device_id}`)
+                              }
+                            >
+                              Edit
+                            </button>
 
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDelete(device.device_id)}
-                          >
-                            Hapus
-                          </button>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(device.device_id)}
+                            >
+                              Hapus
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
                   )}
                 </tbody>
               </table>
+
             </div>
           </div>
         )}

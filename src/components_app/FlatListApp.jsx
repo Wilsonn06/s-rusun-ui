@@ -33,12 +33,12 @@ export default function FlatListApp() {
         </div>
 
         {loading && <div className="muted">Memuat data...</div>}
-
         {!loading && error && <div className="error">{error}</div>}
 
         {!loading && !error && (
           <div className="card">
             <div className="card-body">
+
               {flats.length === 0 ? (
                 <div className="muted">Tidak ada rusun terdaftar.</div>
               ) : (
@@ -47,18 +47,22 @@ export default function FlatListApp() {
                     <tr>
                       <th>ID Rusun</th>
                       <th>Rusun</th>
+                      <th style={{ width: 200 }}></th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {flats.map((f) => (
                       <tr key={f.flat_id}>
                         <td>{f.flat_id}</td>
                         <td>{f.flat_name}</td>
+                        <td></td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               )}
+
             </div>
           </div>
         )}
