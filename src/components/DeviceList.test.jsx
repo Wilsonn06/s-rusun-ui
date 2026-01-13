@@ -5,7 +5,6 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import DeviceList from './DeviceList';
 
-// Mock react-router-dom: pakai MemoryRouter + mock useNavigate
 vi.mock('react-router-dom', async (orig) => {
   const actual = await orig();
   return {
@@ -55,7 +54,6 @@ describe('DeviceList (admin)', () => {
       { device_id: 2, device_name: 'Actuator B', device_type: 'actuator', status: 'inactive' }
     ];
 
-    // GET /devices
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ devices: mockDevices })
@@ -63,16 +61,13 @@ describe('DeviceList (admin)', () => {
 
     renderWithRouter();
 
-    // loading muncul
     expect(screen.getByText('Memuat data...')).toBeInTheDocument();
 
-    // data muncul
     await waitFor(() => {
       expect(screen.getByText('Sensor A')).toBeInTheDocument();
       expect(screen.getByText('Actuator B')).toBeInTheDocument();
     });
 
-    // tidak ada error
     expect(
       screen.queryByText('Gagal memuat daftar device.')
     ).not.toBeInTheDocument();
@@ -96,13 +91,11 @@ describe('DeviceList (admin)', () => {
       { device_id: 1, device_name: 'Sensor A', device_type: 'sensor', status: 'active' }
     ];
 
-    // 1) GET /devices
     global.fetch
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ devices: mockDevices })
       })
-      // 2) DELETE /devices/1
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ message: 'Device berhasil dihapus.' })
@@ -117,10 +110,8 @@ describe('DeviceList (admin)', () => {
     const deleteButton = screen.getByText('Hapus');
     fireEvent.click(deleteButton);
 
-    // confirm dipanggil
     expect(confirmSpy).toHaveBeenCalled();
 
-    // setelah delete, list kosong → "Belum ada device."
     await waitFor(() => {
       expect(screen.getByText('Belum ada device.')).toBeInTheDocument();
     });
@@ -149,7 +140,6 @@ describe('DeviceList (admin)', () => {
     const deleteButton = screen.getByText('Hapus');
     fireEvent.click(deleteButton);
 
-    // Hanya 1 call ke fetch (GET), tidak ada DELETE
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });

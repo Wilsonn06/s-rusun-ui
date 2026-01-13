@@ -188,7 +188,6 @@ describe('UnitList', () => {
       expect(screen.getByText('U001')).toBeInTheDocument();
     });
 
-    // ketika isUser=true, kolom Aksi dan tombol Hapus tidak dirender
     expect(screen.queryByText('Hapus')).not.toBeInTheDocument();
   });
 });
