@@ -1,4 +1,4 @@
-name: CI Local - Lint, Test, Build & Notify Infra (s-rusun-ui)
+name: CI Local - Lint, Test, Build & Notify Infra (UI)
 
 on:
   push:

@@ -37,10 +37,6 @@ import PemilikDetailApp from "./components_app/PemilikDetailApp";
 import SidebarApp from "./components_app/SidebarApp";
 import Sidebar from './components/Sidebar';
 
-
-// =======================================================
-// WRAPPER AGAR BISA MENGGUNAKAN useLocation()
-// =======================================================
 function Layout() {
   const location = useLocation();
   const isApp = location.pathname.startsWith('/app-ui');
@@ -84,8 +80,6 @@ function Layout() {
           <Route path="/devices/edit/:device_id" element={<DeviceEdit />} />
 
 
-
-          {/* ===================== APP ROUTES ===================== */}
           <Route path="/app-ui" element={<Navigate to="/app-ui/unit" />} />
           <Route path="/app-ui/unit" element={<UnitListApp />} />
           <Route path="/app-ui/unit/:unit_id" element={<UnitDetailApp />} />
@@ -101,10 +95,6 @@ function Layout() {
   );
 }
 
-
-// =======================================================
-// ROOT APP
-// =======================================================
 export default function App() {
   return (
     <Router>

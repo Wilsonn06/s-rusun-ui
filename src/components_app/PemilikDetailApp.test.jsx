@@ -1,6 +1,3 @@
-/* eslint-env node, jest */
-/* global vi, expect, describe, it, beforeEach, afterEach, global */
-
 import { render, screen, waitFor } from '@testing-library/react';
 import PemilikDetailApp from './PemilikDetailApp';
 

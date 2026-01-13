@@ -132,7 +132,6 @@ export default function DeviceForm() {
 
             <form id="deviceForm" onSubmit={onSubmit} className="form">
 
-              {/* Rusun */}
               <div className="form-row">
                 <label className="form-label">Pilih Rusun</label>
                 <select

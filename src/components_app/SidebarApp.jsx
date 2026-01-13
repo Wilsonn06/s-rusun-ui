@@ -13,7 +13,7 @@ export default function SidebarApp() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-title">S-Rusun App</div>
+      <div className="sidebar-title">S-Rusun App Sidang 1</div>
       <ul className="nav-list">
         {menus.map((menu) => (
           <li className="nav-item" key={menu.path}>

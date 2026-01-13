@@ -1,4 +1,4 @@
-name: CI - Lint, Test, Build and Push Image (ui)
+name: CI - Lint, Test, Build and Push Image (UI)
 
 on:
   push:

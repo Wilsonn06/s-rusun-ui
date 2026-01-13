@@ -9,7 +9,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* ===== Theme ===== */
 :root {
   --bg: #f5f7fb;
   --card: #ffffff;
@@ -23,7 +22,6 @@ body {
   --brand-red-600: #ab2f2f;
 }
 
-/* ===== Layout ===== */
 .container {
   max-width: 1120px;
   margin: 0 auto;
@@ -57,7 +55,7 @@ body {
 
 .grid-info {
   display: grid;
-  grid-template-columns: 180px 1fr; /* kiri = label, kanan = nilai */
+  grid-template-columns: 180px 1fr; 
   row-gap: 8px;
   column-gap: 20px;
   align-items: center;
@@ -68,7 +66,6 @@ body {
   color: var(--muted);
 }
 
-/* ===== Buttons ===== */
 .btn {
   appearance: none;
   border: 1px solid var(--border);
@@ -101,7 +98,6 @@ body {
 
 .btn-sm { padding: 6px 10px; border-radius: 6px; }
 
-/* ===== Card ===== */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -120,7 +116,6 @@ body {
 
 .muted { color: var(--muted); }
 
-/* ===== Table ===== */
 .table { width: 100%; border-collapse: collapse; }
 .table thead th {
   text-align: left;
@@ -138,7 +133,6 @@ body {
 }
 .table tbody tr:hover { background: #fafafa; }
 
-/* ===== Form ===== */
 .form { display: flex; flex-direction: column; gap: 12px; }
 .form-row { display: flex; flex-direction: column; gap: 6px; }
 .form-label { font-weight: 600; color: var(--text); }
@@ -152,7 +146,6 @@ body {
 
 .form-actions { display: flex; gap: 10px; margin-top: 8px; }
 
-/* ===== Sidebar ===== */
 .sidebar {
   width: 220px;
   height: 100vh;
@@ -181,22 +174,16 @@ body {
   transition: background .15s ease;
 }
 .nav-link:hover { background: #f6f6f7; }
-/* Remove blue focus ring on sidebar links */
 .nav-link:focus, .nav-link:focus-visible { outline: none; box-shadow: none; }
-/* Active (current page) = light red bg + dark red text */
 .nav-link.active { background: #fdeaea; color: var(--brand-red); font-weight: 600; }
 .nav-link.active:hover { background: #fdeaea; }
 
-/* ===== Neutral Link ===== */
 .link-plain { color: var(--text); text-decoration: none; }
-/* Subtle affordance: only on hover/focus to keep neutral look by default */
 .link-plain:hover, .link-plain:focus { color: var(--brand-red); text-decoration: underline; cursor: pointer; outline: none; }
 .link-plain:visited { color: var(--text); }
-/* Optional chevron indicator that fades in on hover */
 .link-plain::after { content: '›'; opacity: 0; margin-left: 4px; color: var(--brand-red); transform: translateX(-2px); transition: opacity .15s, transform .15s; }
 .link-plain:hover::after, .link-plain:focus::after { opacity: 1; transform: translateX(0); }
 
-/* ===== Badges ===== */
 .badge {
   display: inline-block;
   padding: 2px 8px;

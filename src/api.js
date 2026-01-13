@@ -1,16 +1,6 @@
-// ======================================================
-// BASE URL BACKEND
-// ======================================================
-
-// /adm → s-rusun-adm (Backend Admin)
-// /app → s-rusun-app (Backend User)
 const ADM_API_BASE = import.meta.env.VITE_API_BASE;
 const APP_API_BASE = import.meta.env.VITE_APP_BASE;
 
-
-// ======================================================
-// HELPER UNTUK CREATE (POST)
-// ======================================================
 async function handleCreate(url, data, defaultError) {
   const res = await fetch(url, {
     method: "POST",
@@ -28,12 +18,6 @@ async function handleCreate(url, data, defaultError) {
 }
 
 
-
-// ======================================================
-// ======================== ADMIN ========================
-// ======================================================
-
-// ---------------- FLAT (ADMIN) ------------------------
 export async function getFlats() {
   const res = await fetch(`${ADM_API_BASE}/flat`);
   return res.json();
@@ -67,9 +51,6 @@ export async function deleteFlat(id) {
   return res.json();
 }
 
-
-
-// ---------------- TOWER (ADMIN) ------------------------
 export async function getAllTower() {
   const res = await fetch(`${ADM_API_BASE}/tower`);
   return res.json();
@@ -98,9 +79,6 @@ export async function deleteTower(id) {
   return res.json();
 }
 
-
-
-// ---------------- FLOOR (ADMIN) ------------------------
 export async function getAllFloors() {
   const res = await fetch(`${ADM_API_BASE}/floor`);
   return res.json();
@@ -134,9 +112,6 @@ export async function deleteFloor(id) {
   return res.json();
 }
 
-
-
-// ---------------- UNIT (ADMIN) ------------------------
 export async function getAllUnits() {
   const res = await fetch(`${ADM_API_BASE}/unit`);
   return res.json();
@@ -180,9 +155,6 @@ export async function getDevicesByUnit_Admin(id) {
   return res.json();
 }
 
-
-
-// ---------------- PEMILIK (ADMIN) ------------------------
 export async function getAllPemilik() {
   const res = await fetch(`${ADM_API_BASE}/pemilik`);
   return res.json();
@@ -211,9 +183,6 @@ export async function deletePemilik(id) {
   return res.json();
 }
 
-
-
-// ---------------- DEVICES (ADMIN → PROXY ke APP) ------------------------
 export async function getAllDevices_Admin() {
   const res = await fetch(`${ADM_API_BASE}/devices`);
   return res.json();
@@ -224,39 +193,26 @@ export async function getDevicesByUnit_AdminProxy(unit_id) {
   return res.json();
 }
 
-
-
-// ---------------- DEVICES (SHARED - ADMIN & USER) ------------------------
 export async function getDevicesByUnit(unit_id) {
   const res = await fetch(`${ADM_API_BASE}/unit/${unit_id}/devices`);
   return res.json();
 }
 
-
-
-// ======================================================
-// ======================== APP USER =====================
-// ======================================================
-
-// ---------------- FLAT (USER APP) ------------------------
 export async function getUserFlats() {
   const res = await fetch(`${APP_API_BASE}/flat`);
   return res.json();
 }
 
-// ---------------- TOWER (USER APP) ------------------------
 export async function getUserTowers() {
   const res = await fetch(`${APP_API_BASE}/tower`);
   return res.json();
 }
 
-// ---------------- FLOOR (USER APP) ------------------------
 export async function getUserFloors() {
   const res = await fetch(`${APP_API_BASE}/floor`);
   return res.json();
 }
 
-// ---------------- UNIT (USER APP) ------------------------
 export async function getUserUnits() {
   const res = await fetch(`${APP_API_BASE}/unit`);
   return res.json();
@@ -267,13 +223,11 @@ export async function getUserUnitDetail(id) {
   return res.json();
 }
 
-// ---------------- DEVICES (USER APP) ------------------------
 export async function getDevicesByUnit_User(unit_id) {
   const res = await fetch(`${APP_API_BASE}/devices/unit/${unit_id}`);
   return res.json();
 }
 
-// ---------------- PROFILE PEMILIK (USER APP) ------------------------
 export async function getUserProfile() {
   const res = await fetch(`${APP_API_BASE}/pemilik`);
   return res.json();

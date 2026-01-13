@@ -1,6 +1,3 @@
-/* eslint-env node, jest */
-/* global vi, expect, describe, it, beforeEach, afterEach, global */
-
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UnitDetailApp from './UnitDetailApp';
@@ -63,12 +60,10 @@ describe('UnitDetailApp (user)', () => {
     ];
 
     global.fetch
-      // uRes
       .mockResolvedValueOnce({
         ok: true,
         json: async () => mockUnit
       })
-      // sRes
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ devices: mockDevices })
@@ -76,18 +71,15 @@ describe('UnitDetailApp (user)', () => {
 
     renderWithRouter();
 
-    // loading
     expect(screen.getByText('Memuat data...')).toBeInTheDocument();
 
     await waitFor(() => {
-      // detail unit
       expect(screen.getByText('U001')).toBeInTheDocument();
       expect(screen.getByText('101')).toBeInTheDocument();
       expect(screen.getByText('Budi')).toBeInTheDocument();
       expect(screen.getByText('Tower 1')).toBeInTheDocument();
       expect(screen.getByText('Rusun A')).toBeInTheDocument();
 
-      // device
       expect(screen.getByText('Sensor A')).toBeInTheDocument();
       expect(screen.getByText('sensor')).toBeInTheDocument();
       expect(screen.getByText('active')).toBeInTheDocument();
@@ -118,7 +110,6 @@ describe('UnitDetailApp (user)', () => {
     renderWithRouter();
 
     await waitFor(() => {
-      // komponen menampilkan message dari backend: "Unit tidak ditemukan."
       expect(
         screen.getByText('Unit tidak ditemukan.')
       ).toBeInTheDocument();
@@ -148,7 +139,6 @@ describe('UnitDetailApp (user)', () => {
     renderWithRouter();
 
     await waitFor(() => {
-      // komponen menampilkan message dari backend: "Device error"
       expect(
         screen.getByText('Device error')
       ).toBeInTheDocument();
