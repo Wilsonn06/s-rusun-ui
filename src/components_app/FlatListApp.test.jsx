@@ -1,3 +1,6 @@
+/* eslint-env node, jest */
+/* global vi, expect, describe, it, beforeEach, afterEach, global */
+
 import { render, screen, waitFor } from '@testing-library/react';
 import FlatListApp from './FlatListApp';
 
@@ -6,6 +9,8 @@ describe('FlatListApp (user app)', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    // mock import.meta.env.VITE_API_BASE
+    // Vitest tidak mengizinkan assignment langsung, jadi kita override global fetch url saja
     global.fetch = vi.fn();
   });
 
@@ -19,6 +24,7 @@ describe('FlatListApp (user app)', () => {
       { flat_id: 'F002', flat_name: 'Rusun B' }
     ];
 
+    // mock fetch: res.ok = true, body = { data: mockFlats }
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ data: mockFlats })
@@ -26,13 +32,16 @@ describe('FlatListApp (user app)', () => {
 
     render(<FlatListApp />);
 
+    // awalnya loading
     expect(screen.getByText('Memuat data...')).toBeInTheDocument();
 
+    // tunggu data muncul
     await waitFor(() => {
       expect(screen.getByText('Rusun A')).toBeInTheDocument();
       expect(screen.getByText('Rusun B')).toBeInTheDocument();
     });
 
+    // tidak ada pesan error
     expect(screen.queryByText('Gagal mengambil flat')).not.toBeInTheDocument();
   });
 

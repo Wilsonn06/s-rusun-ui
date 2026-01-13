@@ -1,12 +1,17 @@
+/* eslint-env node, jest */
+/* global vi, expect, describe, it, beforeEach, afterEach */
+
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import FlatList from './FlatList';
 
+// mock api.js
 vi.mock('../api', () => ({
   getFlats: vi.fn(),
   deleteFlat: vi.fn()
 }));
 
+// react-router-dom: kita pakai MemoryRouter + mock useNavigate
 vi.mock('react-router-dom', async (orig) => {
   const actual = await orig();
   return {
@@ -57,13 +62,16 @@ describe('FlatList (admin)', () => {
 
     renderWithRouter(<FlatList />);
 
+    // loading muncul
     expect(screen.getByText('Memuat data...')).toBeInTheDocument();
 
+    // data muncul
     await waitFor(() => {
       expect(screen.getByText('Rusun A')).toBeInTheDocument();
       expect(screen.getByText('Rusun B')).toBeInTheDocument();
     });
 
+    // tidak ada error
     expect(
       screen.queryByText('Terjadi kesalahan saat memuat data.')
     ).not.toBeInTheDocument();
@@ -97,7 +105,7 @@ describe('FlatList (admin)', () => {
       { flat_id: 'F001', flat_name: 'Rusun A', flat_address: 'Jl. A' }
     ];
 
-    getFlats.mockResolvedValueOnce(mockFlats).mockResolvedValueOnce([]);
+    getFlats.mockResolvedValueOnce(mockFlats).mockResolvedValueOnce([]); // setelah delete, loadData lagi
     deleteFlat.mockResolvedValueOnce({});
 
     renderWithRouter(<FlatList />);
@@ -109,12 +117,15 @@ describe('FlatList (admin)', () => {
     const deleteButton = screen.getByText('Hapus');
     fireEvent.click(deleteButton);
 
+    // confirm dipanggil sekali
     expect(confirmSpy).toHaveBeenCalled();
 
+    // setelah delete, list kosong → muncul "Belum ada rusun."
     await waitFor(() => {
       expect(screen.getByText('Belum ada rusun.')).toBeInTheDocument();
     });
 
+    // alert sukses dipanggil
     expect(alertSpy).toHaveBeenCalledWith('Rusun berhasil dihapus.');
   });
 
